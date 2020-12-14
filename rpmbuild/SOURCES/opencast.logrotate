@@ -1,0 +1,9 @@
+/var/log/opencast/*log {
+	weekly
+	copytruncate
+	rotate 52
+	missingok
+	notifempty
+	compress
+	sharedscripts
+}

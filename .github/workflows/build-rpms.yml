@@ -26,16 +26,16 @@ jobs:
 
       - name: clone opencast
         run: |
-          git clone https://github.com/opencast/opencast.git ~/opencast
+          git clone https://github.com/opencast/opencast.git
 
       - name: checkout tag
-        working-directory: ~/opencast
+        working-directory: opencast
         run: |
           source buildinfo.env
           git checkout ${gitref}
 
       - name: build opencast
-        working-directory: ~/opencast
+        working-directory: opencast
         run: >
           mvn
           --batch-mode
@@ -44,6 +44,24 @@ jobs:
           -DskipTests
           clean install
 
+      - name: list distributions to build
+        run: |
+          find opencast/build/ -type f -name 'opencast-dist-*gz' \
+            | sed 's/^.*opencast-dist-\([^-]*\)-.*$/\1/' \
+            | tee rpmbuild/SPECS/dists
+
       - name: moce build artifacts
         run: |
-          mv -v ~/opencast/build/opencast-dist-*.tar.gz rpmbuild/SOURCES/
+          mv -v opencast/build/opencast-dist-*.tar.gz rpmbuild/SOURCES/
+
+      - name: build rpms
+        working-directory: rpmbuild/SPECS
+        run: |
+          for dist in $(cat dists); do
+            rpmbuild -ba -D "ocdist ${dist}" opencast.spec
+          done
+
+      - name: build rpms
+        working-directory: rpmbuild/RPMS/noarch
+        run: |
+          ls -lh
