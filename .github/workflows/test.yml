@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: a
-      run: cat /etc&redhat-release
+      run: cat /etc/redhat-release
     - name: b
       run: ls -lhs /
     - name: c
