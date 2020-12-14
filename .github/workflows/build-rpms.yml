@@ -1,0 +1,47 @@
+name: Build RPMs
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    container:
+      image: docker.io/lkiesow/opencast-rpmbuild
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: cache local maven repository
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: where am i
+        run: |
+          pwd
+
+      - name: clone opencast
+        run: |
+          git clone https://github.com/opencast/opencast.git ~/opencast
+
+      - name: checkout tag
+        working-directory: ~/opencast
+        run: |
+          source buildinfo.env
+          git checkout ${gitref}
+
+      - name: build opencast
+        working-directory: ~/opencast
+        run: >
+          mvn
+          --batch-mode
+          -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+          -Dcheckstyle.skip=true
+          -DskipTests
+          clean install
+
+      - name: moce build artifacts
+        run: |
+          mv -v ~/opencast/build/opencast-dist-*.tar.gz rpmbuild/SOURCES/
