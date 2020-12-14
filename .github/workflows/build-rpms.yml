@@ -18,12 +18,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: where am i
-        run: |
-          pwd
-          cd ~
-          pwd
-
       - name: clone opencast
         run: |
           git clone https://github.com/opencast/opencast.git
@@ -31,12 +25,13 @@ jobs:
       - name: show build ref
         id: build_ref
         run: |
-          sed -n 's/%define srcversion \(.*\)$/\1/p' rpmbuild/SPECS/opencast.spec
+          sed -n 's/%define srcversion \(.*\)$/\1/p' rpmbuild/SPECS/opencast.spec \
+            | tee ~/version
 
       - name: checkout opencast ref
         working-directory: opencast
         run: |
-          git checkout $(sed -n 's/%define srcversion \(.*\)$/\1/p' ../rpmbuild/SPECS/opencast.spec)
+          git checkout $(cat ~/version)
 
       - name: build opencast
         working-directory: opencast
@@ -69,7 +64,7 @@ jobs:
       - name: list rpms
         working-directory: /github/home/rpmbuild/RPMS/noarch
         run: |
-          ls -lh
+          du -hs opencast*.rpm
 
       - name: configure s3cmd
         env:
@@ -84,7 +79,7 @@ jobs:
       - name: publish rpms
         working-directory: /github/home/rpmbuild/RPMS/noarch
         run: |
-          ocversion=$(sed -n 's/%define srcversion \(.*\)$/\1/p' ../..//SPECS/opencast.spec)
+          set -eux
           for file in *.rpm; do
-            s3cmd put --no-check-md5 "${file}" "s3://public/$(ocversion)/${file}"
+            s3cmd put --no-check-md5 "${file}" "s3://public/$(cat ~/version)/${file}"
           done
