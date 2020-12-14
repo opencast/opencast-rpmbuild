@@ -31,8 +31,7 @@ jobs:
       - name: checkout tag
         working-directory: opencast
         run: |
-          source buildinfo.env
-          git checkout ${gitref}
+          git checkout $(../rpmbuild/SPECS/opencast.spec | awk '{print $3}')
 
       - name: build opencast
         working-directory: opencast
