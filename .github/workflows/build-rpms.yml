@@ -21,6 +21,8 @@ jobs:
       - name: where am i
         run: |
           pwd
+          cd ~
+          pwd
 
       - name: clone opencast
         run: |
