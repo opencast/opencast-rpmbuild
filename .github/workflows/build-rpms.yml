@@ -28,10 +28,14 @@ jobs:
         run: |
           git clone https://github.com/opencast/opencast.git
 
+      - name: show build tag
+        run: |
+          sed -n 's/%define srcversion \(.*\)$/\1/p' rpmbuild/SPECS/opencast.spec
+
       - name: checkout tag
         working-directory: opencast
         run: |
-          git checkout $(../rpmbuild/SPECS/opencast.spec | awk '{print $3}')
+          git checkout $(sed -n 's/%define srcversion \(.*\)$/\1/p' ../rpmbuild/SPECS/opencast.spec)
 
       - name: build opencast
         working-directory: opencast
