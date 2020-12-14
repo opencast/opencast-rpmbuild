@@ -28,11 +28,12 @@ jobs:
         run: |
           git clone https://github.com/opencast/opencast.git
 
-      - name: show build tag
+      - name: show build ref
+        id: build_ref
         run: |
           sed -n 's/%define srcversion \(.*\)$/\1/p' rpmbuild/SPECS/opencast.spec
 
-      - name: checkout tag
+      - name: checkout opencast ref
         working-directory: opencast
         run: |
           git checkout $(sed -n 's/%define srcversion \(.*\)$/\1/p' ../rpmbuild/SPECS/opencast.spec)
@@ -64,7 +65,25 @@ jobs:
             rpmbuild -ba -D "ocdist ${dist}" opencast.spec
           done
 
-      - name: build rpms
+      - name: list rpms
         working-directory: rpmbuild/RPMS/noarch
         run: |
           ls -lh
+
+      - name: configure s3cmd
+        env:
+          S3_KEY: ${{ secrets.S3_KEY }}
+          S3_SECRET: ${{ secrets.S3_SECRET }}
+        run: |
+          dnf install s3cmd
+          cp s3cfg ~/.s3cfg
+          sed -i "s/S3_KEY/${S3_KEY}/" ~/.s3cfg
+          sed -i "s/S3_SECRET/${S3_SECRET}/" ~/.s3cfg
+
+      - name: publish rpms
+        working-directory: rpmbuild/RPMS/noarch
+        run: |
+          ocversion=$(sed -n 's/%define srcversion \(.*\)$/\1/p' ../..//SPECS/opencast.spec)
+          for file in *.rpm; do
+            s3cmd put --no-check-md5 "${file}" "s3://public/$(ocversion)/${file}"
+          done
