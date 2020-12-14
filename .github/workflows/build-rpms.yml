@@ -54,10 +54,10 @@ jobs:
             | sed 's/^.*opencast-dist-\([^-]*\)-.*$/\1/' \
             | tee rpmbuild/SPECS/dists
 
-      - name: moce build artifacts
+      - name: move build artifacts
         run: |
-          cp -r rpmbuild/ ~
-          mv -v opencast/build/opencast-dist-*.tar.gz rpmbuild/SOURCES/
+          cp -rv rpmbuild/ ~
+          mv -v opencast/build/opencast-dist-*.tar.gz ~/rpmbuild/SOURCES/
 
       - name: build rpms
         working-directory: /github/home/rpmbuild/SPECS
