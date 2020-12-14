@@ -56,17 +56,18 @@ jobs:
 
       - name: moce build artifacts
         run: |
+          cp -r rpmbuild/ ~
           mv -v opencast/build/opencast-dist-*.tar.gz rpmbuild/SOURCES/
 
       - name: build rpms
-        working-directory: rpmbuild/SPECS
+        working-directory: /github/home/rpmbuild/SPECS
         run: |
           for dist in $(cat dists); do
             rpmbuild -ba -D "ocdist ${dist}" opencast.spec
           done
 
       - name: list rpms
-        working-directory: rpmbuild/RPMS/noarch
+        working-directory: /github/home/rpmbuild/RPMS/noarch
         run: |
           ls -lh
 
@@ -81,7 +82,7 @@ jobs:
           sed -i "s/S3_SECRET/${S3_SECRET}/" ~/.s3cfg
 
       - name: publish rpms
-        working-directory: rpmbuild/RPMS/noarch
+        working-directory: /github/home/rpmbuild/RPMS/noarch
         run: |
           ocversion=$(sed -n 's/%define srcversion \(.*\)$/\1/p' ../..//SPECS/opencast.spec)
           for file in *.rpm; do
