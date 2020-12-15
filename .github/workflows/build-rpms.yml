@@ -4,9 +4,15 @@ on: push
 
 jobs:
   build:
+    strategy:
+      matrix:
+        osversion:
+          - el7
+          - el8
+    name: build (${{ matrix.osversion }})
     runs-on: ubuntu-20.04
     container:
-      image: docker.io/lkiesow/opencast-rpmbuild:el8
+      image: docker.io/lkiesow/opencast-rpmbuild:${{ matrix.osversion }}
     steps:
       - uses: actions/checkout@v2
 
