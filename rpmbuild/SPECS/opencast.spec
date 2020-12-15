@@ -14,7 +14,7 @@
 %define ocdist allinone
 %endif
 
-Name:          opencastr9%{ocdist}
+Name:          opencast9-%{ocdist}
 Version:       %{srcversion}
 Release:       1%{?dist}
 Summary:       Open Source Lecture Capture & Video Management Tool
