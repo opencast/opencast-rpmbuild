@@ -1,6 +1,9 @@
 name: Build RPMs
 
-on: push
+on:
+  push:
+    branches:
+      - 'r/*'
 
 jobs:
   build:
