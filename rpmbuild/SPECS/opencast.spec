@@ -4,7 +4,7 @@
 %define __requires_exclude_from ^.*\\.jar$
 %define __provides_exclude_from ^.*\\.jar$
 
-%define srcversion 8.9
+%define srcversion 7.9
 %define uid   opencast
 %define gid   opencast
 %define nuid  7967
@@ -14,7 +14,7 @@
 %define ocdist allinone
 %endif
 
-Name:          opencast8-%{ocdist}
+Name:          opencast7-%{ocdist}
 Version:       %{srcversion}
 Release:       1%{?dist}
 Summary:       Open Source Lecture Capture & Video Management Tool
@@ -196,7 +196,6 @@ fi
 
 
 %changelog
-* Mon Dec 14 2020 Lars Kiesow <lkiesow@uos.de> - 8.9-1
-- Update to Opencast 8.9
+* Tue Dec 15 2020 Lars Kiesow <lkiesow@uos.de> - 7.9-1
+- Update to Opencast 7.9
 - Initial automated build
-
