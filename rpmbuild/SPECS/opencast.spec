@@ -4,7 +4,7 @@
 %define __requires_exclude_from ^.*\\.jar$
 %define __provides_exclude_from ^.*\\.jar$
 
-%define srcversion 8.9
+%define srcversion 9.0
 %define uid   opencast
 %define gid   opencast
 %define nuid  7967
@@ -14,7 +14,7 @@
 %define ocdist allinone
 %endif
 
-Name:          opencast8-%{ocdist}
+Name:          opencastr9%{ocdist}
 Version:       %{srcversion}
 Release:       1%{?dist}
 Summary:       Open Source Lecture Capture & Video Management Tool
@@ -42,6 +42,7 @@ Requires: nc
 Requires: sed
 
 %if "%{?ocdist}" == "allinone"
+Requires: activemq-dist >= 5.14
 Requires: activemq-dist >= 5.14
 %endif
 
@@ -196,6 +197,9 @@ fi
 
 
 %changelog
+* Tue Dec 15 2020 Lars Kiesow <lkiesow@uos.de> - 9.0-1
+- Update to Opencast 9.0
+
 * Mon Dec 14 2020 Lars Kiesow <lkiesow@uos.de> - 8.9-1
 - Update to Opencast 8.9
 - Initial automated build
