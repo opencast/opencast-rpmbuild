@@ -85,12 +85,12 @@ jobs:
         working-directory: /github/home/rpmbuild/RPMS/noarch
         run: |
           for file in *.rpm; do
-            s3cmd put --no-check-md5 "${file}" "s3://public/rpms/el8/$(cat ~/version)/${file}"
+            s3cmd put --no-check-md5 "${file}" "s3://public/rpms/${{ matrix.osversion }}/$(cat ~/version)/${file}"
           done
 
       - name: publish srpms
         working-directory: /github/home/rpmbuild/SRPMS
         run: |
           for file in opencast*-allinone-*.src.rpm; do
-            s3cmd put --no-check-md5 "${file}" "s3://public/srpms/el8/$(cat ~/version)/${file}"
+            s3cmd put --no-check-md5 "${file}" "s3://public/srpms/${{ matrix.osversion }}/$(cat ~/version)/${file}"
           done
