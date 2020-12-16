@@ -31,15 +31,14 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/opencast/mvn.opencast.org.git
 
-      - name: prepare build artifacts
-        working-directory: mvn.opencast.org
-        run: |
-          mkdir -p ~/.m2/repository/
-          cp -rv ??? ~/.m2/repository/
-
       - name: clone opencast
         run: |
           git clone https://github.com/opencast/opencast.git
+
+      - name: prepare additional maven repository
+        working-directory: opencast
+        run: |
+          sed -i "s_https://mvn.opencast.org/_file://$(readlink -f ../mvn.opencast.org)_" pom.xml
 
       - name: show build ref
         id: build_ref
