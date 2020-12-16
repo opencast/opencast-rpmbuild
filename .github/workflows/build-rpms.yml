@@ -38,7 +38,7 @@ jobs:
       - name: prepare additional maven repository
         working-directory: opencast
         run: |
-          sed -i "s_https://mvn.opencast.org/_file://$(readlink -f ../mvn.opencast.org)_" pom.xml
+          sed -i "s#https://mvn.opencast.org/#file://$(readlink -f ../mvn.opencast.org)#" pom.xml
 
       - name: show build ref
         id: build_ref
