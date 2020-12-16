@@ -27,6 +27,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      - name: clone mvn.opencast.org
+        run: |
+          git clone --depth 1 https://github.com/opencast/mvn.opencast.org.git
+
+      - name: prepare build artifacts
+        working-directory: mvn.opencast.org
+        run: |
+          mkdir -p ~/.m2/repository/
+          cp -rv ??? ~/.m2/repository/
+
       - name: clone opencast
         run: |
           git clone https://github.com/opencast/opencast.git
