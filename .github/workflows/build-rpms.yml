@@ -102,3 +102,14 @@ jobs:
         working-directory: /github/home/rpmbuild/SRPMS
         run: |
           s3cmd put --no-check-md5 opencast*-allinone-*.src.rpm "s3://public/srpms/${{ matrix.osversion }}/$(cat ~/version)/"
+
+      - name: send notification
+        env:
+          MATRIX_PASS: ${{ secrets.MATRIX_PASS }}
+          MATRIX_USER: ${{ secrets.MATRIX_USER }}
+          URL_LOGON: 'https://matrix.org/_matrix/client/r0/login'
+          URL_MESSAGE: 'https://matrix.org/_matrix/client/r0/rooms/%21gwaqKjZRpCQkpkTVwh%3Amatrix.org/send/m.room.message'
+        run: |
+          MESSAGE="Finished building Opencast $(cat ~/version)/ RPMs (${{ matrix.osversion }})"
+          TOKEN="$(curl -s -XPOST -d '{"type":"m.login.password", "user":"'"$MATRIX_USER"'", "password":"'"$MATRIX_PASS"'"}' "$URL_LOGON" | jq -r .access_token)"
+          curl -s -XPOST -d '{"msgtype":"m.text", "body":"'"${MESSAGE}"'"}' "${URL_MESSAGE}?access_token=${TOKEN}"
