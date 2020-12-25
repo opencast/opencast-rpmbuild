@@ -16,7 +16,7 @@
 
 Name:          opencast9-%{ocdist}
 Version:       %{srcversion}
-Release:       1%{?dist}
+Release:       2%{?dist}
 Summary:       Open Source Lecture Capture & Video Management Tool
 
 Group:         Applications/Multimedia
@@ -43,7 +43,12 @@ Requires: sed
 
 %if "%{?ocdist}" == "allinone"
 Requires: activemq-dist >= 5.14
-Requires: activemq-dist >= 5.14
+Recommends: elasticsearch-oss >= 7.9
+Recommends: elasticsearch-oss < 8
+%endif
+%if "%{?ocdist}" == "admin^"
+Recommends: elasticsearch-oss >= 7.9
+Recommends: elasticsearch-oss < 8
 %endif
 
 BuildRequires:     systemd
@@ -52,6 +57,7 @@ Requires(preun):   systemd
 Requires(postun):  systemd
 
 Provides: opencast = %{version}
+Obsoletes: opencast8-%{ocdist}
 
 BuildArch: noarch
 
@@ -197,6 +203,9 @@ fi
 
 
 %changelog
+* Fri Dec 25 2020 Lars Kiesow <lkiesow@uos.de> - 9.1-2
+- Recommend elasticsearch
+
 * Thu Dec 17 2020 Lars Kiesow <lkiesow@uos.de> - 9.1-1
 - Update to Opencast 9.1
 
