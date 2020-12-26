@@ -43,12 +43,22 @@ Requires: sed
 
 %if "%{?ocdist}" == "allinone"
 Requires: activemq-dist >= 5.14
+%if 0%{?el7}
+Requires: elasticsearch-oss >= 7.9
+Requires: elasticsearch-oss < 8
+%else
 Recommends: elasticsearch-oss >= 7.9
 Recommends: elasticsearch-oss < 8
 %endif
-%if "%{?ocdist}" == "admin^"
+%endif
+%if "%{?ocdist}" == "admin"
+%if 0%{?el7}
+Requires: elasticsearch-oss >= 7.9
+Requires: elasticsearch-oss < 8
+%else
 Recommends: elasticsearch-oss >= 7.9
 Recommends: elasticsearch-oss < 8
+%endif
 %endif
 
 BuildRequires:     systemd
