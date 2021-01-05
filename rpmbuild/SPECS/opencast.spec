@@ -14,9 +14,9 @@
 %define ocdist allinone
 %endif
 
-Name:          opencast9-%{ocdist}
+Name:          opencast-%{ocdist}
 Version:       %{srcversion}
-Release:       2%{?dist}
+Release:       3%{?dist}
 Summary:       Open Source Lecture Capture & Video Management Tool
 
 Group:         Applications/Multimedia
@@ -66,8 +66,9 @@ Requires(post):    systemd
 Requires(preun):   systemd
 Requires(postun):  systemd
 
-Provides: opencast = %{version}
-Obsoletes: opencast8-%{ocdist}
+Provides:  opencast            = %{version}
+Provides:  opencast9-%{ocdist} = %{version}
+Obsoletes: opencast9-%{ocdist} < %{version}
 
 BuildArch: noarch
 
@@ -213,6 +214,9 @@ fi
 
 
 %changelog
+* Tue Jan 05 2021 Lars Kiesow <lkiesow@uos.de> - 9.1-3
+- Switch from `opencast9` to `opencast` package name
+
 * Fri Dec 25 2020 Lars Kiesow <lkiesow@uos.de> - 9.1-2
 - Recommend elasticsearch
 
