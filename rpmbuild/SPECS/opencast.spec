@@ -16,7 +16,7 @@
 
 Name:          opencast-%{ocdist}
 Version:       %{srcversion}
-Release:       4%{?dist}
+Release:       5%{?dist}
 Summary:       Open Source Lecture Capture & Video Management Tool
 
 Group:         Applications/Multimedia
@@ -69,6 +69,7 @@ Requires(postun):  systemd
 Provides:  opencast             = %{version}
 Provides:  opencast9-%{ocdist}  = %{version}
 Obsoletes: opencast9-%{ocdist} <= %{version}
+Obsoletes: opencast8-%{ocdist} <= %{version}
 
 BuildArch: noarch
 
@@ -214,6 +215,9 @@ fi
 
 
 %changelog
+* Mon Jan 11 2021 Lars Kiesow <lkiesow@uos.de> - 9.1-5
+- Obsolete opencast8-...
+
 * Mon Jan 11 2021 Lars Kiesow <lkiesow@uos.de> - 9.1-4
 - Fix upgrade path from earlier 9.x builds
 
