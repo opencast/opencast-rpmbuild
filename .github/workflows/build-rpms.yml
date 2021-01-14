@@ -72,6 +72,11 @@ jobs:
           cp -rv rpmbuild/ ~
           mv -v opencast/build/opencast-dist-*.tar.gz ~/rpmbuild/SOURCES/
 
+      - name: build repository rpm
+        working-directory: /github/home/rpmbuild/SPECS
+        run: |
+          rpmbuild -ba opencast-repository.spec
+
       - name: build rpms
         working-directory: /github/home/rpmbuild/SPECS
         run: |
@@ -93,7 +98,13 @@ jobs:
           sed -i "s/S3_KEY/${S3_KEY}/" ~/.s3cfg
           sed -i "s/S3_SECRET/${S3_SECRET}/" ~/.s3cfg
 
-      - name: publish rpms
+      - name: publish repository rpm
+        working-directory: /github/home/rpmbuild/RPMS/noarch
+        run: |
+          s3cmd put --no-check-md5 opencast-repository*.rpm "s3://public/rpms/${{ matrix.osversion }}/"
+          rm opencast-repository*.rpm
+
+      - name: publish opencast rpms
         working-directory: /github/home/rpmbuild/RPMS/noarch
         run: |
           s3cmd put --no-check-md5 *.rpm "s3://public/rpms/${{ matrix.osversion }}/$(cat ~/version)/"
@@ -101,7 +112,8 @@ jobs:
       - name: publish srpms
         working-directory: /github/home/rpmbuild/SRPMS
         run: |
-          s3cmd put --no-check-md5 opencast*-allinone-*.src.rpm "s3://public/srpms/${{ matrix.osversion }}/$(cat ~/version)/"
+          s3cmd put --no-check-md5 opencast-allinone-*.src.rpm "s3://public/srpms/${{ matrix.osversion }}/$(cat ~/version)/"
+          s3cmd put --no-check-md5 opencast-repository-*.src.rpm "s3://public/srpms/${{ matrix.osversion }}/"
 
       - name: send notification
         env:
