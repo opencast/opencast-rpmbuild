@@ -17,8 +17,8 @@ Obsoletes: opencast-repository-8 <= %{version}
 
 
 %description
-RPM repository for Opencast 9 on CentOS, Scientific Linux and
-Red hat Enterprise Linux
+RPM repository for Opencast 9 on CentOS, Red hat Enterprise Linux and
+equivalent distributions.
 
 
 %prep
@@ -28,8 +28,8 @@ Red hat Enterprise Linux
 
 
 %install
-install -m 0644 -p -D %{SOURCE0} %{buildroot}/etc/yum.repos.d/opencast.repo
-install -m 0644 -p -D %{SOURCE1} %{buildroot}/etc/yum.repos.d/opencast-testing.repo
+install -m 0644 -p -D %{SOURCE0} %{buildroot}%{_sysconfdir}/yum.repos.d/opencast.repo
+install -m 0644 -p -D %{SOURCE1} %{buildroot}%{_sysconfdir}/yum.repos.d/opencast-testing.repo
 
 
 %clean
@@ -38,7 +38,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%config(noreplace) /etc/yum.repos.d/*
+%config %{_sysconfdir}/yum.repos.d/*
 
 
 %changelog
