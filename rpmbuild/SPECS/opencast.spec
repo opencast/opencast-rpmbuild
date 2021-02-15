@@ -4,7 +4,7 @@
 %define __requires_exclude_from ^.*\\.jar$
 %define __provides_exclude_from ^.*\\.jar$
 
-%define srcversion 9.1
+%define srcversion 9.2
 %define uid   opencast
 %define gid   opencast
 %define nuid  7967
@@ -16,7 +16,7 @@
 
 Name:          opencast-%{ocdist}
 Version:       %{srcversion}
-Release:       5%{?dist}
+Release:       1%{?dist}
 Summary:       Open Source Lecture Capture & Video Management Tool
 
 Group:         Applications/Multimedia
@@ -215,6 +215,9 @@ fi
 
 
 %changelog
+* Mon Feb 15 2021 Lars Kiesow <lkiesow@uos.de> - 9.2-1
+- Update to Opencast 9.2
+
 * Mon Jan 11 2021 Lars Kiesow <lkiesow@uos.de> - 9.1-5
 - Obsolete opencast8-...
 
