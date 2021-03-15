@@ -4,7 +4,7 @@
 %define __requires_exclude_from ^.*\\.jar$
 %define __provides_exclude_from ^.*\\.jar$
 
-%define srcversion 9.2
+%define srcversion 9.3
 %define uid   opencast
 %define gid   opencast
 %define nuid  7967
@@ -26,6 +26,7 @@ Source0:       opencast-dist-%{ocdist}-%{srcversion}.tar.gz
 Source1:       jetty.xml
 Source2:       opencast.logrotate
 Source3:       org.apache.aries.transaction.cfg
+Source4:       org.apache.karaf.shell.cfg
 
 BuildRequires: tar
 BuildRequires: gzip
@@ -140,6 +141,8 @@ install -p -D -m 0644 %{SOURCE2} \
 # Install workaround dummy file in /etc
 install -p -D -m 0644 %{SOURCE3} \
    %{buildroot}%{_sysconfdir}/opencast
+install -p -D -m 0644 %{SOURCE4} \
+   %{buildroot}%{_sysconfdir}/opencast
 
 # Install Systemd unit file
 install -p -D -m 0644 \
@@ -215,6 +218,9 @@ fi
 
 
 %changelog
+* Mon Mar 15 2021 Lars Kiesow <lkiesow@uos.de> - 9.3-1
+- Update to 9.3
+
 * Mon Feb 15 2021 Lars Kiesow <lkiesow@uos.de> - 9.2-1
 - Update to Opencast 9.2
 
