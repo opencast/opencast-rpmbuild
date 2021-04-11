@@ -242,12 +242,6 @@ fi
 * Tue Dec 15 2020 Lars Kiesow <lkiesow@uos.de> - 9.0-1
 - Update to Opencast 9.0
 
-* Tue Apr 06 2021 Lars Kiesow <lkiesow@uos.de> - 8.11-1
-- Update to Opencast 8.11
-
-* Wed Dec 23 2020 Lars Kiesow <lkiesow@uos.de> - 8.10-1
-- Update to Opencast 8.10
-
 * Mon Dec 14 2020 Lars Kiesow <lkiesow@uos.de> - 8.9-1
 - Update to Opencast 8.9
 - Initial automated build
