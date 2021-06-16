@@ -10,8 +10,8 @@ jobs:
     strategy:
       matrix:
         osversion:
-          - el7
-          - el8
+          - el7-oc10
+          - el8-oc10
     name: build (${{ matrix.osversion }})
     runs-on: ubuntu-20.04
     container:

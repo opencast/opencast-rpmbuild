@@ -1,6 +1,6 @@
 Name:      opencast-repository
 Summary:   Opencast RPM Repository
-Version:   9
+Version:   10
 Release:   1%{?dist}
 License:   CC-0
 URL:       https://pkg.opencast.org
@@ -11,9 +11,9 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 Requires: epel-release
 
-Provides:  opencast-repository-9  = %{version}
+Provides:  opencast-repository-10  = %{version}
+Obsoletes: opencast-repository-10 <= %{version}
 Obsoletes: opencast-repository-9 <= %{version}
-Obsoletes: opencast-repository-8 <= %{version}
 
 
 %description
@@ -42,6 +42,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Jun 15 2021 Lars Kiesow <lkiesow@uos.de> - 10-1
+- Opencast 10 repository
+
 * Thu Jan 14 2021 Lars Kiesow <lkiesow@uos.de> - 9-1
 - Rolling repository package
 

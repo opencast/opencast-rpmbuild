@@ -4,7 +4,7 @@
 %define __requires_exclude_from ^.*\\.jar$
 %define __provides_exclude_from ^.*\\.jar$
 
-%define srcversion 9.6
+%define srcversion 10.0
 %define uid   opencast
 %define gid   opencast
 %define nuid  7967
@@ -33,7 +33,7 @@ BuildRequires: gzip
 
 Requires: ffmpeg >= 3
 Requires: hunspell >= 1.2.8
-Requires: java >= 1:1.8.0
+Requires: java-11
 Requires: sox >= 14
 Requires: tesseract >= 3
 
@@ -218,6 +218,9 @@ fi
 
 
 %changelog
+* Tue Jun 15 2021 Lars Kiesow <lkiesow@uos.de> - 10.0-1
+- Update to 10.0
+
 * Tue Jun 15 2021 Lars Kiesow <lkiesow@uos.de> - 9.6-1
 - Update to 9.6
 

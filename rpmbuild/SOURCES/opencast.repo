@@ -1,13 +1,13 @@
 [opencast]
-name = Opencast 9 el $releasever Repository
-baseurl  = https://pkg.opencast.org/rpms/release/el/$releasever/oc-09/x86_64
+name = Opencast 10 el $releasever Repository
+baseurl  = https://pkg.opencast.org/rpms/release/el/$releasever/oc-10/x86_64
 enabled  = 1
 gpgcheck = 1
-gpgkey = https://pkg.opencast.org/gpgkeys/opencast-9-rpm.key
+gpgkey = https://pkg.opencast.org/gpgkeys/opencast-10-rpm.key
 
 [opencast-noarch]
-name = Opencast 9 el $releasever Repository - noarch
-baseurl  = https://pkg.opencast.org/rpms/release/el/$releasever/oc-09/noarch
+name = Opencast 10 el $releasever Repository - noarch
+baseurl  = https://pkg.opencast.org/rpms/release/el/$releasever/oc-10/noarch
 enabled  = 1
 gpgcheck = 1
-gpgkey = https://pkg.opencast.org/gpgkeys/opencast-9-rpm.key
+gpgkey = https://pkg.opencast.org/gpgkeys/opencast-10-rpm.key
