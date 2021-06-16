@@ -10,12 +10,12 @@ jobs:
     strategy:
       matrix:
         osversion:
-          - el7-oc10
-          - el8-oc10
+          - el7
+          - el8
     name: build (${{ matrix.osversion }})
     runs-on: ubuntu-20.04
     container:
-      image: docker.io/lkiesow/opencast-rpmbuild:${{ matrix.osversion }}
+      image: docker.io/lkiesow/opencast-rpmbuild:${{ matrix.osversion }}-oc10
     steps:
       - uses: actions/checkout@v2
 
