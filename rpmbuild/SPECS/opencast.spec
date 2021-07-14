@@ -4,7 +4,7 @@
 %define __requires_exclude_from ^.*\\.jar$
 %define __provides_exclude_from ^.*\\.jar$
 
-%define srcversion 10.0
+%define srcversion 10.1
 %define uid   opencast
 %define gid   opencast
 %define nuid  7967
@@ -16,7 +16,7 @@
 
 Name:          opencast-%{ocdist}
 Version:       %{srcversion}
-Release:       2%{?dist}
+Release:       1%{?dist}
 Summary:       Open Source Lecture Capture & Video Management Tool
 
 Group:         Applications/Multimedia
@@ -95,9 +95,6 @@ find opencast-dist-%{ocdist}/etc -name '*.xml' \
 # ' fix vim hl
 sed -i -e '$a\' opencast-dist-%{ocdist}/etc/shell.init.script
 # ' fix vim hl
-
-# Fix for https://github.com/opencast/opencast/pull/2765
-sed -i 's/^org/#org/' opencast-dist-%{ocdist}/etc/org.opencastproject.distribution.streaming.wowza.WowzaStreamingDistributionService.cfg
 
 
 %install
@@ -221,6 +218,9 @@ fi
 
 
 %changelog
+* Thu Jul 15 2021 Lars Kiesow <lkiesow@uos.de> - 10.1-1
+- Update to Opencast 10.1
+
 * Wed Jun 23 2021 Lars Kiesow <lkiesow@uos.de> - 10.0-2
 - Configuration fix
 
