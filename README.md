@@ -5,4 +5,4 @@ This repository contains automation scripts to build RPMs for [Opencast](https:/
 
 - Builds run on GitHub Actions
 - Builds are run on release branches only
-- RPMs are distibuted to https://s3.opencast.org/minio/public/
+- RPMs are distibuted to Opencast's S3 storage
