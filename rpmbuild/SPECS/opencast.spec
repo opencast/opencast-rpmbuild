@@ -14,6 +14,10 @@
 %define ocdist allinone
 %endif
 
+%if "%{?tarversion}" == ""
+%define tarversion %{version}
+%endif
+
 Name:          opencast-%{ocdist}
 Version:       %{srcversion}
 Release:       1%{?dist}
@@ -22,7 +26,7 @@ Summary:       Open Source Lecture Capture & Video Management Tool
 Group:         Applications/Multimedia
 License:       ECL 2.0
 URL:           https://opencast.org
-Source0:       opencast-dist-%{ocdist}-%{srcversion}.tar.gz
+Source0:       opencast-dist-%{ocdist}-%{tarversion}.tar.gz
 Source1:       jetty.xml
 Source2:       opencast.logrotate
 Source3:       org.apache.aries.transaction.cfg
