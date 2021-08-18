@@ -4,7 +4,7 @@
 %define __requires_exclude_from ^.*\\.jar$
 %define __provides_exclude_from ^.*\\.jar$
 
-%define srcversion 9.7
+%define srcversion 9.8
 %define uid   opencast
 %define gid   opencast
 %define nuid  7967
@@ -222,6 +222,9 @@ fi
 
 
 %changelog
+* Wed Aug 18 2021 Lars Kiesow <lkiesow@uos.de> - 9.8-1
+- Update to 9.8
+
 * Thu Jul 15 2021 Lars Kiesow <lkiesow@uos.de> - 9.6-1
 - Update to 9.7
 
