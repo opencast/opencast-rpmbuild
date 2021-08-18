@@ -51,8 +51,15 @@ jobs:
         run: |
           sed -i "s#https://mvn.opencast.org/#file://$(readlink -f ../mvn.opencast.org)#" pom.xml
 
+      - name: set java version
+        run: |
+          alternatives --set java java-11-openjdk.x86_64
+          alternatives --set javac java-11-openjdk.x86_64
+
       - name: build opencast
         working-directory: opencast
+        env:
+          JAVA_HOME: /usr/lib/jvm/java-11-openjdk
         run: >
           mvn
           --batch-mode
