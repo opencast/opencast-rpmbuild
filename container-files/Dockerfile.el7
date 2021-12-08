@@ -1,6 +1,7 @@
-FROM docker.io/library/centos:7
+FROM quay.io/centos/centos:7
 
-RUN yum install -y https://pkg.opencast.org/rpms/release/el/7/noarch/opencast-repository-8-0-1.el8.noarch.rpm \
+RUN yum -y update \
+    && yum -y install https://pkg.opencast.org/rpms/release/el/7/noarch/opencast-repository-8-0-1.el8.noarch.rpm \
     && yum -y install epel-release \
 	 && yum -y update \
     && yum -y clean all
