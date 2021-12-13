@@ -243,6 +243,12 @@ fi
 * Tue Jun 15 2021 Lars Kiesow <lkiesow@uos.de> - 10.0-1
 - Update to 10.0
 
+* Mon Dec 13 2021 Lars Kiesow <lkiesow@uos.de> - 9.10-1
+- Update to Opencast 9.10
+
+* Tue Oct 12 2021 Lars Kiesow <lkiesow@uos.de> - 9.9-1
+- Update to Opencast 9.9
+
 * Tue Jun 15 2021 Lars Kiesow <lkiesow@uos.de> - 9.6-1
 - Update to 9.6
 
