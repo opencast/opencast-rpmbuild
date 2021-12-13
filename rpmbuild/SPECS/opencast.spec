@@ -4,7 +4,7 @@
 %define __requires_exclude_from ^.*\\.jar$
 %define __provides_exclude_from ^.*\\.jar$
 
-%define srcversion 10.3
+%define srcversion 10.6
 %define uid   opencast
 %define gid   opencast
 %define nuid  7967
@@ -222,6 +222,15 @@ fi
 
 
 %changelog
+* Mon Dec 13 2021 Lars Kiesow <lkiesow@uos.de> - 10.6-1
+- Update to Opencast 10.6
+
+* Wed Nov 10 2021 Lars Kiesow <lkiesow@uos.de> - 10.5-1
+- Update to Opencast 10.5
+
+* Thu Oct 14 2021 Lars Kiesow <lkiesow@uos.de> - 10.4-1
+- Update to Opencast 10.4
+
 * Fri Sep 17 2021 Lars Kiesow <lkiesow@uos.de> - 10.3-1
 - Update to Opencast 10.3
 
@@ -236,6 +245,12 @@ fi
 
 * Tue Jun 15 2021 Lars Kiesow <lkiesow@uos.de> - 10.0-1
 - Update to 10.0
+
+* Mon Dec 13 2021 Lars Kiesow <lkiesow@uos.de> - 9.10-1
+- Update to Opencast 9.10
+
+* Tue Oct 12 2021 Lars Kiesow <lkiesow@uos.de> - 9.9-1
+- Update to Opencast 9.9
 
 * Tue Jun 15 2021 Lars Kiesow <lkiesow@uos.de> - 9.6-1
 - Update to 9.6

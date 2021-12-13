@@ -1,0 +1,31 @@
+FROM quay.io/centos/centos:stream9
+
+RUN dnf -y install https://dl.fedoraproject.org/pub/epel/9/Everything/x86_64/Packages/e/epel-release-9-2.el9.noarch.rpm \
+    && dnf install -y https://pkg.opencast.org/rpms/release/el/8/oc-10/noarch/opencast-repository-10-1.el8.noarch.rpm \
+    && dnf -y clean all
+RUN dnf -y install python3-pip \
+    && pip3 install s3cmd \
+    && dnf -y install \
+    dnf-plugins-core \
+    rpmdevtools \
+    rpmlint \
+    sudo \
+    bzip2 \
+    java-11-devel \
+    jq \
+    maven \
+    sed \
+    tar \
+    xz \
+    gzip \
+    git \
+    systemd \
+    && dnf -y clean all
+RUN useradd --no-create-home makerpm
+
+# Make Java 11 the default
+RUN alternatives --set java java-11-openjdk.x86_64 \
+    && alternatives --set javac java-11-openjdk.x86_64
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+
+CMD ["/build"]

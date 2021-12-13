@@ -1,0 +1,32 @@
+FROM quay.io/centos/centos:7
+
+RUN yum -y update \
+    && yum -y install https://pkg.opencast.org/rpms/release/el/7/noarch/opencast-repository-8-0-1.el8.noarch.rpm \
+    && yum -y install epel-release \
+	 && yum -y update \
+    && yum -y clean all
+RUN yum -y install https://data.lkiesow.io/opencast/maven-3.8.2-1.el7.noarch.rpm
+RUN yum -y install \
+    yum-utils \
+    rpmdevtools \
+    rpmlint \
+    sudo \
+    bzip2 \
+    java-11-devel \
+	 jq \
+    sed \
+    tar \
+    xz \
+    gzip \
+    git \
+	 s3cmd \
+    systemd \
+    && yum -y clean all
+RUN useradd --no-create-home makerpm
+
+# Make Java 11 the default
+RUN alternatives --set java java-11-openjdk.x86_64 \
+    && alternatives --set javac java-11-openjdk.x86_64
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+
+CMD ["/build"]
