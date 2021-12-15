@@ -1,6 +1,6 @@
 Name:      opencast-repository
 Summary:   Opencast RPM Repository
-Version:   10
+Version:   11
 Release:   1%{?dist}
 License:   CC-0
 URL:       https://pkg.opencast.org
@@ -11,13 +11,14 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 Requires: epel-release
 
-Provides:  opencast-repository-10  = %{version}
+Provides:  opencast-repository-11  = %{version}
+Obsoletes: opencast-repository-11 <= %{version}
 Obsoletes: opencast-repository-10 <= %{version}
 Obsoletes: opencast-repository-9 <= %{version}
 
 
 %description
-RPM repository for Opencast 9 on CentOS, Red hat Enterprise Linux and
+RPM repository for Opencast 11 on CentOS, Red hat Enterprise Linux and
 equivalent distributions.
 
 
@@ -42,6 +43,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Dec 15 2021 Lars Kiesow <lkiesow@uos.de> - 11-1
+- Opencast 11 repository
+
 * Tue Jun 15 2021 Lars Kiesow <lkiesow@uos.de> - 10-1
 - Opencast 10 repository
 

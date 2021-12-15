@@ -4,7 +4,7 @@
 %define __requires_exclude_from ^.*\\.jar$
 %define __provides_exclude_from ^.*\\.jar$
 
-%define srcversion 10.6
+%define srcversion 11.0
 %define uid   opencast
 %define gid   opencast
 %define nuid  7967
@@ -72,6 +72,8 @@ Requires(preun):   systemd
 Requires(postun):  systemd
 
 Provides:  opencast             = %{version}
+# Keep the following at 9.
+# That is when we moved away from packages including their version.
 Provides:  opencast9-%{ocdist}  = %{version}
 Obsoletes: opencast9-%{ocdist} <= %{version}
 Obsoletes: opencast8-%{ocdist} <= %{version}
@@ -222,6 +224,9 @@ fi
 
 
 %changelog
+* Wed Dec 15 2021 Lars Kiesow <lkiesow@uos.de> - 11.0-1
+- Update to Opencast 11.0
+
 * Mon Dec 13 2021 Lars Kiesow <lkiesow@uos.de> - 10.6-1
 - Update to Opencast 10.6
 
