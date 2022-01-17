@@ -64,7 +64,7 @@ jobs:
           s3cmd put -P ffmpeg*.src.rpm "s3://opencast-rpmbuild/srpms/${{ matrix.osversion }}/ffmpeg/"
 
       - name: send notification
-        working-directory: rpmbuild/SRPMS
+        working-directory: rpmbuild/SPECS
         env:
           MATRIX_PASS: ${{ secrets.MATRIX_PASS }}
           MATRIX_USER: ${{ secrets.MATRIX_USER }}
