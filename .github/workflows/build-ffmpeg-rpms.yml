@@ -34,7 +34,7 @@ jobs:
           rpmbuild -ba ffmpeg-static.spec
 
       - name: list rpms
-        working-directory: rpmbuild/RPMS/noarch
+        working-directory: rpmbuild/RPMS/x86_64
         run: |
           du -hs ./*.rpm
 
@@ -53,7 +53,7 @@ jobs:
           echo "signature_v2 = False" >> "$HOME/.s3cfg"
 
       - name: publish repository rpm
-        working-directory: rpmbuild/RPMS/noarch
+        working-directory: rpmbuild/RPMS/x86_64
         run: |
           s3cmd put -P ffmpeg*.rpm "s3://opencast-rpmbuild/rpms/${{ matrix.osversion }}/ffmpeg/"
           rm ffmpeg*.rpm
