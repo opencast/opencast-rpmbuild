@@ -52,7 +52,7 @@ jobs:
           echo "secret_key = ${S3_SECRET_KEY}" >> "$HOME/.s3cfg"
           echo "signature_v2 = False" >> "$HOME/.s3cfg"
 
-      - name: publish repository rpm
+      - name: publish ffmpeg rpm
         working-directory: rpmbuild/RPMS/x86_64
         run: |
           s3cmd put -P ffmpeg*.rpm "s3://opencast-rpmbuild/rpms/${{ matrix.osversion }}/ffmpeg/"
