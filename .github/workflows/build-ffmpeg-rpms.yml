@@ -18,6 +18,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: mimic rpmdev-setuptree
+        working-directory: rpmbuild
+        run: |
+          ln -s "$(pwd)" ~/rpmbuild
+
       - name: download static-ffmpeg
         working-directory: rpmbuild/SPECS
         run: |
