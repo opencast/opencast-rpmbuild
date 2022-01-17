@@ -1,11 +1,11 @@
 %define debug_package %{nil}
 
-%define  nversion  N-104552-g23a1f11d02
-%define  date      20211115053315
+%define  date      20220117045355
+%define  nversion  N-105291-gdcc9454ab9
 
 Name:          ffmpeg
 Summary:       Hyper fast MPEG1/MPEG4/H263/RV and AC3/MPEG audio encoder
-Version:       4.4.1.git.%{date}
+Version:       5.0.git.%{date}
 Release:       1%{?dist}
 License:       GPLv3+
 Group:         System Environment/Libraries
@@ -54,6 +54,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Mon Jan 17 2022 Lars Kiesow <lkiesow@uos.de> - 5.0.git.20220117045355-1
+- Update to latest git version
+
 * Sun Jan 16 2022 Lars Kiesow <lkiesow@uos.de> - 4.4.1.git.20211115053315-1
 - Update to latest git version
 
