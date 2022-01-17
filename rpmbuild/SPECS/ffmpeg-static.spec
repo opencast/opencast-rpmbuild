@@ -1,4 +1,6 @@
-%define debug_package %{nil}
+%global _enable_debug_package 0
+%global debug_package %{nil}
+%global __os_install_post %{nil}
 
 %define  date      20220117045355
 %define  nversion  N-105291-gdcc9454ab9
