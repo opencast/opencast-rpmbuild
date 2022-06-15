@@ -1,6 +1,6 @@
 Name:      opencast-repository
 Summary:   Opencast RPM Repository
-Version:   11
+Version:   12
 Release:   1%{?dist}
 License:   CC-0
 URL:       https://pkg.opencast.org
@@ -9,16 +9,19 @@ Source1:   https://raw.githubusercontent.com/lkiesow/opencast-rpmbuild/r/%{versi
 BuildArch: noarch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
+%if 0%{?el7}%{?el8}
 Requires: epel-release
+%endif
 
-Provides:  opencast-repository-11  = %{version}
+Provides:  opencast-repository-12  = %{version}
+Obsoletes: opencast-repository-12 <= %{version}
 Obsoletes: opencast-repository-11 <= %{version}
 Obsoletes: opencast-repository-10 <= %{version}
 Obsoletes: opencast-repository-9 <= %{version}
 
 
 %description
-RPM repository for Opencast 11 on CentOS, Red hat Enterprise Linux and
+RPM repository for Opencast 12 on CentOS Stream, Red hat Enterprise Linux and
 equivalent distributions.
 
 
@@ -43,6 +46,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Jun 15 2022 Lars Kiesow <lkiesow@uos.de> - 12-1
+- Opencast 12 repository
+
 * Wed Dec 15 2021 Lars Kiesow <lkiesow@uos.de> - 11-1
 - Opencast 11 repository
 
