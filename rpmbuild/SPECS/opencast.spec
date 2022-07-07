@@ -20,7 +20,7 @@
 
 Name:          opencast-%{ocdist}
 Version:       %{srcversion}
-Release:       1%{?dist}
+Release:       2%{?dist}
 Summary:       Open Source Lecture Capture & Video Management Tool
 
 Group:         Applications/Multimedia
@@ -38,7 +38,6 @@ BuildRequires: gzip
 Requires: ffmpeg >= 5
 Requires: hunspell >= 1.2.8
 Requires: java-11
-Requires: sox >= 14
 Requires: tesseract >= 3
 
 # For the start/stop scripts:
@@ -223,6 +222,9 @@ fi
 
 
 %changelog
+* Thu Jul 07 2022 Lars Kiesow <lkiesow@uos.de> - 12.0-2
+- Don't require sox any longer
+
 * Wed Jun 15 2022 Lars Kiesow <lkiesow@uos.de> - 12.0-1
 - Update to Opencast 12.0
 

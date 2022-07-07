@@ -9,9 +9,7 @@ Source1:   https://raw.githubusercontent.com/lkiesow/opencast-rpmbuild/r/%{versi
 BuildArch: noarch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
-%if 0%{?el7}%{?el8}
 Requires: epel-release
-%endif
 
 Provides:  opencast-repository-12  = %{version}
 Obsoletes: opencast-repository-12 <= %{version}
