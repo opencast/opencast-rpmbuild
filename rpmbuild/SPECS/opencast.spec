@@ -4,7 +4,7 @@
 %define __requires_exclude_from ^.*\\.jar$
 %define __provides_exclude_from ^.*\\.jar$
 
-%define srcversion 12.0
+%define srcversion 12.1
 %define uid   opencast
 %define gid   opencast
 %define nuid  7967
@@ -20,7 +20,7 @@
 
 Name:          opencast-%{ocdist}
 Version:       %{srcversion}
-Release:       2%{?dist}
+Release:       1%{?dist}
 Summary:       Open Source Lecture Capture & Video Management Tool
 
 Group:         Applications/Multimedia
@@ -222,6 +222,9 @@ fi
 
 
 %changelog
+* Wed Jul 20 2022 Lars Kiesow <lkiesow@uos.de> - 12.1-1
+- Update to Opencast 12.1
+
 * Thu Jul 07 2022 Lars Kiesow <lkiesow@uos.de> - 12.0-2
 - Don't require sox any longer
 
