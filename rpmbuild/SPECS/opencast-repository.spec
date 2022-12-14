@@ -1,17 +1,18 @@
 Name:      opencast-repository
 Summary:   Opencast RPM Repository
-Version:   12
+Version:   13
 Release:   1%{?dist}
 License:   CC-0
 URL:       https://pkg.opencast.org
-Source0:   https://raw.githubusercontent.com/lkiesow/opencast-rpmbuild/r/%{version}.x/rpmbuild/SOURCES/opencast.repo
-Source1:   https://raw.githubusercontent.com/lkiesow/opencast-rpmbuild/r/%{version}.x/rpmbuild/SOURCES/opencast-testing.repo
+Source0:   https://raw.githubusercontent.com/opencast/opencast-rpmbuild/r/%{version}.x/rpmbuild/SOURCES/opencast.repo
+Source1:   https://raw.githubusercontent.com/opencast/opencast-rpmbuild/r/%{version}.x/rpmbuild/SOURCES/opencast-testing.repo
 BuildArch: noarch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 Requires: epel-release
 
-Provides:  opencast-repository-12  = %{version}
+Provides:  opencast-repository-13  = %{version}
+Obsoletes: opencast-repository-13 <= %{version}
 Obsoletes: opencast-repository-12 <= %{version}
 Obsoletes: opencast-repository-11 <= %{version}
 Obsoletes: opencast-repository-10 <= %{version}
@@ -19,7 +20,7 @@ Obsoletes: opencast-repository-9 <= %{version}
 
 
 %description
-RPM repository for Opencast 12 on CentOS Stream, Red hat Enterprise Linux and
+RPM repository for Opencast 13 on CentOS Stream, Red hat Enterprise Linux and
 equivalent distributions.
 
 
@@ -44,6 +45,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Dec 14 2022 Lars Kiesow <lkiesow@uos.de> - 13-1
+- Opencast 13 repository
+
 * Wed Jun 15 2022 Lars Kiesow <lkiesow@uos.de> - 12-1
 - Opencast 12 repository
 
