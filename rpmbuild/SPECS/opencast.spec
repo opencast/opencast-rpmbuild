@@ -4,7 +4,7 @@
 %define __requires_exclude_from ^.*\\.jar$
 %define __provides_exclude_from ^.*\\.jar$
 
-%define srcversion 12.5
+%define srcversion 12.6
 %define uid   opencast
 %define gid   opencast
 %define nuid  7967
@@ -222,6 +222,9 @@ fi
 
 
 %changelog
+* Wed Dec 14 2022 Lars Kiesow <lkiesow@uos.de> - 12.6-1
+- Update to Opencast 12.6
+
 * Wed Nov 16 2022 Lars Kiesow <lkiesow@uos.de> - 12.5-1
 - Update to Opencast 12.5
 
