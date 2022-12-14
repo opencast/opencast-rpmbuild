@@ -1,13 +1,13 @@
 [opencast-testing]
-name = Opencast 12 el $releasever Test Repository
-baseurl  = https://pkg.opencast.org/rpms/testing/el/$releasever/oc-12/x86_64
+name = Opencast 13 el $releasever Test Repository
+baseurl  = https://pkg.opencast.org/rpms/testing/el/$releasever/oc-13/x86_64
 enabled  = 0
 gpgcheck = 1
-gpgkey = https://pkg.opencast.org/gpgkeys/opencast-12-rpm.key
+gpgkey = https://pkg.opencast.org/gpgkeys/opencast-13-rpm.key
 
 [opencast-testing-noarch]
-name = Opencast 12 el $releasever Test Repository - noarch
-baseurl  = https://pkg.opencast.org/rpms/testing/el/$releasever/oc-12/noarch
+name = Opencast 13 el $releasever Test Repository - noarch
+baseurl  = https://pkg.opencast.org/rpms/testing/el/$releasever/oc-13/noarch
 enabled  = 0
 gpgcheck = 1
-gpgkey = https://pkg.opencast.org/gpgkeys/opencast-12-rpm.key
+gpgkey = https://pkg.opencast.org/gpgkeys/opencast-13-rpm.key
