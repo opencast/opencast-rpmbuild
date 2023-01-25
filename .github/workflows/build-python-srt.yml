@@ -15,7 +15,6 @@ jobs:
     strategy:
       matrix:
         osversion:
-          - el7
           - el8
           - el9
     name: build (${{ matrix.osversion }})
@@ -23,7 +22,7 @@ jobs:
     container:
       image: docker.io/lkiesow/opencast-rpmbuild:${{ matrix.osversion }}-oc13.2
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: mimic rpmdev-setuptree
         working-directory: rpmbuild
@@ -37,9 +36,8 @@ jobs:
 
       - name: install dependencies
         working-directory: rpmbuild/SPECS
-        run: >
+        run: |
           dnf builddep ${{ env.package }}.spec
-          || yum-builddep  ${{ env.package }}.spec
 
       - name: build rpm
         working-directory: rpmbuild/SPECS
