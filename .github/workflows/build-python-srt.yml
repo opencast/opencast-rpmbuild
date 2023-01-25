@@ -7,8 +7,8 @@ env:
 on:
   push:
     paths:
-      - .github/workflows/build-${{ env.package }}.yml
-      - rpmbuild/SPECS/${{ env.package }}.spec
+      - .github/workflows/build-python-srt.yml
+      - rpmbuild/SPECS/python-srt.spec
 
 jobs:
   build:
