@@ -37,7 +37,7 @@ jobs:
       - name: install dependencies
         working-directory: rpmbuild/SPECS
         run: |
-          dnf builddep ${{ env.package }}.spec
+          dnf builddep -y ${{ env.package }}.spec
 
       - name: build rpm
         working-directory: rpmbuild/SPECS
