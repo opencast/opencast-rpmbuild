@@ -30,12 +30,17 @@ jobs:
         run: |
           ln -s "$(pwd)" ~/rpmbuild
 
-      - name: download ${{ env.package }}
+      - name: download sources
         working-directory: rpmbuild/SPECS
         run: |
           spectool -g -R ${{ env.package }}.spec
 
-      - name: build ${{ env.package }} rpm
+      - name: install dependencies
+        working-directory: rpmbuild/SPECS
+        run: |
+          dnf builddep ${{ env.package }}.spec
+
+      - name: build rpm
         working-directory: rpmbuild/SPECS
         run: |
           rpmbuild -ba ${{ env.package }}.spec
@@ -59,7 +64,7 @@ jobs:
           echo "secret_key = ${S3_SECRET_KEY}" >> "$HOME/.s3cfg"
           echo "signature_v2 = False" >> "$HOME/.s3cfg"
 
-      - name: publish ${{ env.package }} rpm
+      - name: publish rpm
         working-directory: rpmbuild/RPMS/${{ env.arch }}
         run: |
           s3cmd put -P ${{ env.package }}*.rpm "s3://opencast-rpmbuild/rpms/${{ matrix.osversion }}/${{ env.package }}/"
