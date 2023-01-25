@@ -1,7 +1,14 @@
-name: Build FFmpeg RPMs
+name: Build python-srt
+
+env:
+  package: python-srt
+  arch: noarch
 
 on:
   push:
+    paths:
+      - .github/workflows/build-${{ env.package }}.yml
+      - rpmbuild/SPECS/${{ env.package }}.spec
 
 jobs:
   build:
@@ -12,9 +19,9 @@ jobs:
           - el8
           - el9
     name: build (${{ matrix.osversion }})
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     container:
-      image: docker.io/lkiesow/opencast-rpmbuild:${{ matrix.osversion }}-oc10.3
+      image: docker.io/lkiesow/opencast-rpmbuild:${{ matrix.osversion }}-oc13.2
     steps:
       - uses: actions/checkout@v2
 
@@ -23,18 +30,18 @@ jobs:
         run: |
           ln -s "$(pwd)" ~/rpmbuild
 
-      - name: download static-ffmpeg
+      - name: download ${{ env.package }}
         working-directory: rpmbuild/SPECS
         run: |
-          spectool -g -R ffmpeg-static.spec
+          spectool -g -R ${{ env.package }}.spec
 
-      - name: build ffmpeg rpm
+      - name: build ${{ env.package }} rpm
         working-directory: rpmbuild/SPECS
         run: |
-          rpmbuild -ba ffmpeg-static.spec
+          rpmbuild -ba ${{ env.package }}.spec
 
       - name: list rpms
-        working-directory: rpmbuild/RPMS/x86_64
+        working-directory: rpmbuild/RPMS/${{ env.arch }}
         run: |
           du -hs ./*.rpm
 
@@ -52,16 +59,16 @@ jobs:
           echo "secret_key = ${S3_SECRET_KEY}" >> "$HOME/.s3cfg"
           echo "signature_v2 = False" >> "$HOME/.s3cfg"
 
-      - name: publish ffmpeg rpm
-        working-directory: rpmbuild/RPMS/x86_64
+      - name: publish ${{ env.package }} rpm
+        working-directory: rpmbuild/RPMS/${{ env.arch }}
         run: |
-          s3cmd put -P ffmpeg*.rpm "s3://opencast-rpmbuild/rpms/${{ matrix.osversion }}/ffmpeg/"
-          rm ffmpeg*.rpm
+          s3cmd put -P ${{ env.package }}*.rpm "s3://opencast-rpmbuild/rpms/${{ matrix.osversion }}/${{ env.package }}/"
+          rm ${{ env.package }}*.rpm
 
       - name: publish srpms
         working-directory: rpmbuild/SRPMS
         run: |
-          s3cmd put -P ffmpeg*.src.rpm "s3://opencast-rpmbuild/srpms/${{ matrix.osversion }}/ffmpeg/"
+          s3cmd put -P ${{ env.package }}*.src.rpm "s3://opencast-rpmbuild/srpms/${{ matrix.osversion }}/${{ env.package }}/"
 
       - name: send notification
         working-directory: rpmbuild/SPECS
@@ -72,7 +79,7 @@ jobs:
           URL_LOGOUT: 'https://matrix.org/_matrix/client/r0/logout'
           URL_MESSAGE: 'https://matrix.org/_matrix/client/r0/rooms/%21gwaqKjZRpCQkpkTVwh%3Amatrix.org/send/m.room.message'
         run: |
-          MESSAGE="Finished building FFmpeg $(sed -n 's_%define  date *__p' ffmpeg-static.spec) RPMs (${{ matrix.osversion }})"
+          MESSAGE="Finished building PUT RPM NAME HERE (${{ matrix.osversion }})"
           TOKEN="$(curl -s -XPOST -d '{"type":"m.login.password", "user":"'"$MATRIX_USER"'", "password":"'"$MATRIX_PASS"'", "initial_device_display_name":"GitHub Actions"}' "$URL_LOGIN" | jq -r .access_token)"
           curl -s -XPOST -d '{"msgtype":"m.text", "body":"'"${MESSAGE}"'"}' "${URL_MESSAGE}?access_token=${TOKEN}"
           curl -s -XPOST "${URL_LOGOUT}?access_token=${TOKEN}"
