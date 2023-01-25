@@ -2,7 +2,7 @@ name: Build python-webvtt-py
 
 env:
   package: python-webvtt-py
-  arch: noarch
+  arch: x86_64
 
 on:
   push:

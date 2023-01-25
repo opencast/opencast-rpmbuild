@@ -3,7 +3,7 @@
 Name:           python-%{srcname}
 Version:        0.4.6
 Release:        1%{?dist}
-Summary:        Read, write and segment WebVTT caption files in Python.
+Summary:        Read, write and segment WebVTT caption files in Python
 
 License:        MIT
 URL:            https://pypi.python.org/pypi/%{srcname}
