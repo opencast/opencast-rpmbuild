@@ -80,4 +80,4 @@ jobs:
         run: |
           RPM="$(ls -1 ~/rpmbuild/RPMS/${{ env.arch }}/ | tail -n1)"
           MESSAGE="Finished building ${RPM} for Opencast"
-          curl -s -XPOST -d '{"msgtype":"m.text", "body":"'"${MESSAGE}"'"}' "${URL_MESSAGE}?access_token=${TOKEN}"
+          curl -s -XPOST -d '{"msgtype":"m.text", "body":"'"${MESSAGE}"'"}' "${URL_MESSAGE}?access_token=${MATRIX_TOKEN}"
