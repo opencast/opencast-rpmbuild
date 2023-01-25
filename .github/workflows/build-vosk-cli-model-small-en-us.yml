@@ -1,0 +1,83 @@
+name: Build vosk-cli-model-small-en-us
+
+env:
+  package: vosk-cli-model-small-en-us
+  arch: noarch
+
+on:
+  push:
+    paths:
+      - .github/workflows/build-vosk-cli-model-small-en-us.yml
+      - rpmbuild/SPECS/vosk-cli-model-small-en-us.spec
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        osversion:
+          - el8
+          - el9
+    name: build (${{ matrix.osversion }})
+    runs-on: ubuntu-latest
+    container:
+      image: docker.io/lkiesow/opencast-rpmbuild:${{ matrix.osversion }}-oc13.2
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: mimic rpmdev-setuptree
+        working-directory: rpmbuild
+        run: |
+          ln -s "$(pwd)" ~/rpmbuild
+
+      - name: download sources
+        working-directory: rpmbuild/SPECS
+        run: |
+          spectool -g -R ${{ env.package }}.spec
+
+      - name: install dependencies
+        working-directory: rpmbuild/SPECS
+        run: |
+          dnf builddep -y ${{ env.package }}.spec
+
+      - name: build rpm
+        working-directory: rpmbuild/SPECS
+        run: |
+          rpmbuild -ba ${{ env.package }}.spec
+
+      - name: list rpms
+        working-directory: rpmbuild/RPMS/${{ env.arch }}
+        run: |
+          du -hs ./*.rpm
+
+      - name: configure s3cmd
+        env:
+          S3_HOST: ${{ secrets.S3_HOST }}
+          S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
+          S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
+        run: |
+          echo "host_base = ${S3_HOST}" > "$HOME/.s3cfg"
+          echo "host_bucket = ${S3_HOST}" >> "$HOME/.s3cfg"
+          echo "bucket_location = us-east-1" >> "$HOME/.s3cfg"
+          echo "use_https = True" >> "$HOME/.s3cfg"
+          echo "access_key = ${S3_ACCESS_KEY}" >> "$HOME/.s3cfg"
+          echo "secret_key = ${S3_SECRET_KEY}" >> "$HOME/.s3cfg"
+          echo "signature_v2 = False" >> "$HOME/.s3cfg"
+
+      - name: publish rpm
+        working-directory: rpmbuild/RPMS/${{ env.arch }}
+        run: |
+          s3cmd put -P *.rpm "s3://opencast-rpmbuild/rpms/${{ matrix.osversion }}/${{ env.package }}/"
+
+      - name: publish srpms
+        working-directory: rpmbuild/SRPMS
+        run: |
+          s3cmd put -P *.src.rpm "s3://opencast-rpmbuild/srpms/${{ matrix.osversion }}/${{ env.package }}/"
+
+      - name: send notification
+        env:
+          MATRIX_TOKEN: ${{ secrets.MATRIX_TOKEN }}
+          URL_MESSAGE: 'https://matrix.org/_matrix/client/r0/rooms/%21gwaqKjZRpCQkpkTVwh%3Amatrix.org/send/m.room.message'
+        run: |
+          RPM="$(ls -1 ~/rpmbuild/RPMS/${{ env.arch }}/ | tail -n1)"
+          MESSAGE="Finished building ${RPM} for Opencast"
+          curl -s -XPOST -d '{"msgtype":"m.text", "body":"'"${MESSAGE}"'"}' "${URL_MESSAGE}?access_token=${MATRIX_TOKEN}"
