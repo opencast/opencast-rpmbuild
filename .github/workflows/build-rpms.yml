@@ -100,7 +100,7 @@ jobs:
 
       - name: prepare gpg
         env:
-          GPG_KEY: ${{ secrets.GPG_KEY }}
+          GPG_KEY_OC14: ${{ secrets.GPG_KEY_OC14 }}
         run: |
           echo "${GPG_KEY_OC14}" | gpg --import
           echo '%_gpg_name 37B02AF95FAE32C687F4DA11970621489E6F1548' >> ~/.rpmmacros
