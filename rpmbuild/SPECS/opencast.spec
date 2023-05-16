@@ -4,7 +4,6 @@
 %define __requires_exclude_from ^.*\\.jar$
 %define __provides_exclude_from ^.*\\.jar$
 
-%define srcversion 13.5
 %define uid   opencast
 %define gid   opencast
 %define nuid  7967
@@ -14,13 +13,13 @@
 %define ocdist allinone
 %endif
 
-%if "%{?tarversion}" == ""
-%define tarversion %{version}
+%if "%{?octarversion}" == ""
+%define octarversion %{ocversion}
 %endif
 
 Name:          opencast-%{ocdist}
-Version:       %{srcversion}
-Release:       1%{?dist}
+Version:       %{ocversion}
+Release:       %{ocrelease}%{?dist}
 Summary:       Open Source Lecture Capture & Video Management Tool
 
 Group:         Applications/Multimedia
@@ -44,25 +43,6 @@ Requires: tesseract >= 3
 Requires: bash
 Requires: nc
 Requires: sed
-
-%if "%{?ocdist}" == "allinone"
-%if 0%{?el7}
-Requires: elasticsearch-oss >= 7.9
-Requires: elasticsearch-oss < 8
-%else
-Recommends: elasticsearch-oss >= 7.9
-Recommends: elasticsearch-oss < 8
-%endif
-%endif
-%if "%{?ocdist}" == "admin"
-%if 0%{?el7}
-Requires: elasticsearch-oss >= 7.9
-Requires: elasticsearch-oss < 8
-%else
-Recommends: elasticsearch-oss >= 7.9
-Recommends: elasticsearch-oss < 8
-%endif
-%endif
 
 BuildRequires:     systemd
 Requires(post):    systemd
@@ -222,6 +202,9 @@ fi
 
 
 %changelog
+* Tue May 16 2023 Lars Kiesow <lkiesow@uos.de> - 14-0
+- Opencast 14 daily builds
+
 * Thu Apr 20 2023 Lars Kiesow <lkiesow@uos.de> - 13.5-1
 - Update to Opencast 13.5
 

@@ -1,13 +1,13 @@
 [opencast]
-name = Opencast 13 el $releasever Repository
-baseurl  = https://pkg.opencast.org/rpms/release/el/$releasever/oc-13/x86_64
+name = Opencast 14 el$releasever Repository
+baseurl  = https://pkg.opencast.org/opencast-rpm/release/el$releasever/oc-14/x86_64
 enabled  = 1
 gpgcheck = 1
-gpgkey = https://pkg.opencast.org/gpgkeys/opencast-13-rpm.key
+gpgkey = https://pkg.opencast.org/opencast-rpm/pgkeys/opencast-14-rpm.key
 
 [opencast-noarch]
 name = Opencast 13 el $releasever Repository - noarch
-baseurl  = https://pkg.opencast.org/rpms/release/el/$releasever/oc-13/noarch
+baseurl  = https://pkg.opencast.org/opencast-rpm/release/el$releasever/oc-14/noarch
 enabled  = 1
 gpgcheck = 1
-gpgkey = https://pkg.opencast.org/gpgkeys/opencast-13-rpm.key
+gpgkey = https://pkg.opencast.org/opencast-rpm/gpgkeys/opencast-14-rpm.key
