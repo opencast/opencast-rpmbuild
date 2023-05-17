@@ -37,6 +37,10 @@ jobs:
         run: |
           echo "%ocversion ${OC_VERSION}" >> ~/.rpmmacros
 
+      - name: rpmbuild-setuptree
+        run: |
+          cp -rv rpmbuild/ ~
+
       - name: build repository rpm
         working-directory: /github/home/rpmbuild/SPECS
         run: |
