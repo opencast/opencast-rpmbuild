@@ -5,7 +5,7 @@ Release:   1%{?dist}
 License:   CC-0
 URL:       https://pkg.opencast.org
 Source0:   https://raw.githubusercontent.com/opencast/opencast-rpmbuild/r/%{version}.x/rpmbuild/SOURCES/opencast.repo
-Source1:   https://raw.githubusercontent.com/opencast/opencast-rpmbuild/r/%{version}.x/rpmbuild/SOURCES/opencast-nightly.repo
+Source1:   https://raw.githubusercontent.com/opencast/opencast-rpmbuild/r/%{version}.x/rpmbuild/SOURCES/opencast-testing.repo
 BuildArch: noarch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
@@ -20,7 +20,7 @@ Obsoletes: opencast-repository-9 <= %{version}
 
 
 %description
-RPM repository for Opencast 14 on CentOS Stream, Red Hat Enterprise Linux and
+RPM repository for Opencast on CentOS Stream, Red hat Enterprise Linux and
 equivalent distributions.
 
 
@@ -32,7 +32,7 @@ equivalent distributions.
 
 %install
 install -m 0644 -p -D %{SOURCE0} %{buildroot}%{_sysconfdir}/yum.repos.d/opencast.repo
-install -m 0644 -p -D %{SOURCE1} %{buildroot}%{_sysconfdir}/yum.repos.d/opencast-nightly.repo
+install -m 0644 -p -D %{SOURCE1} %{buildroot}%{_sysconfdir}/yum.repos.d/opencast-testing.repo
 
 
 %clean
@@ -46,7 +46,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %changelog
 * Wed May 17 2023 Lars Kiesow <lkiesow@uos.de> - 14-1
-- Opencast 14 Repository
+- Opencast 14 repository
 
 * Wed Dec 14 2022 Lars Kiesow <lkiesow@uos.de> - 13-1
 - Opencast 13 repository

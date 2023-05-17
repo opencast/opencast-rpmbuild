@@ -12,10 +12,13 @@ fi
 cd "${1}"
 
 # Store S3 path
-S3PATH="${2}"
+S3PATH="${2%/}"
 
 # Get old repodata
 s3cmd get -r "${S3PATH}/repodata" \
+
+# Create repository if it does not yet exist
+[ -d repodata ] || createrepo .
 
 # Recreate structure from S3
 s3cmd ls -r "${S3PATH}/" \

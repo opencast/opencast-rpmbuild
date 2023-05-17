@@ -6,18 +6,20 @@ on:
     branches:
       - 'r/*'
 
+env:
+  OC_VERSION: 14
+
 jobs:
   build:
     strategy:
       matrix:
         osversion:
-          #- el7
-          - el8
-          - el9
-    name: build (${{ matrix.osversion }})
+          - "8"
+          - "9"
+    name: build (el${{ matrix.osversion }})
     runs-on: ubuntu-latest
     container:
-      image: docker.io/lkiesow/opencast-rpmbuild:${{ matrix.osversion }}-oc14
+      image: docker.io/lkiesow/opencast-rpmbuild:el${{ matrix.osversion }}-oc14
     steps:
       - uses: actions/checkout@v3
 
@@ -35,18 +37,7 @@ jobs:
 
       - name: clone opencast
         run: |
-          git clone --branch r/14.x --depth 1 https://github.com/opencast/opencast.git
-
-      - name: show build ref
-        id: build_ref
-        run: |
-          sed -n 's/%define srcversion \(.*\)$/\1/p' rpmbuild/SPECS/opencast.spec \
-            | tee ~/version
-
-      - name: checkout opencast ref
-        working-directory: opencast
-        run: |
-          git checkout $(cat ~/version)
+          git clone --branch r/${OC_VERSION}.x --depth 1 https://github.com/opencast/opencast.git
 
       - name: prepare additional maven repository
         working-directory: opencast
@@ -77,8 +68,8 @@ jobs:
 
       - name: define rpm version
         run: |
-          echo "%octarversion 14-SNAPSHOT" >> ~/.rpmmacros
-          echo "%ocversion 14" >> ~/.rpmmacros
+          echo "%octarversion ${OC_VERSION}-SNAPSHOT" >> ~/.rpmmacros
+          echo "%ocversion ${OC_VERSION}" >> ~/.rpmmacros
           echo "%ocrelease 0.$(date +%Y%m%d%H%M%S)" >> ~/.rpmmacros
 
       - name: build repository rpm
@@ -100,10 +91,9 @@ jobs:
 
       - name: prepare gpg
         env:
-          GPG_KEY_OC14: ${{ secrets.GPG_KEY_OC14 }}
+          GPG_KEY: ${{ secrets.GPG_KEY_OC14 }}
         run: |
-          echo "${GPG_KEY_OC14}" | gpg --import
-          echo '%_gpg_name 37B02AF95FAE32C687F4DA11970621489E6F1548' >> ~/.rpmmacros
+          echo "${GPG_KEY}" | gpg --import
 
       - name: sign rpms
         working-directory: /github/home/rpmbuild/RPMS/noarch
@@ -131,4 +121,4 @@ jobs:
       - name: publish repository rpm
         working-directory: /github/home/rpmbuild/RPMS/
         run: |
-          createrepo-s3 noarch/ "s3://opencast-rpm/nightly/${{ matrix.osversion }}/oc-14/noarch"
+          createrepo-s3 noarch/ "s3://opencast-pkg/rpms/testing/el/${{ matrix.osversion }}/oc-14/noarch"
