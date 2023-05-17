@@ -1,6 +1,6 @@
 Name:      opencast-repository
 Summary:   Opencast RPM Repository
-Version:   14
+Version:   %{ocversion}
 Release:   1%{?dist}
 License:   CC-0
 URL:       https://pkg.opencast.org

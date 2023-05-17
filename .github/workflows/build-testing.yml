@@ -1,10 +1,18 @@
-name: Build RPMs
+name: Build Testing RPMs
 
 on:
   workflow_dispatch:
   push:
     branches:
       - 'r/*'
+    paths:
+      - .github/workflows/build-testing.yml
+      - rpmbuild/SOURCES/*
+      - rpmbuild/SPECS/opencast.spec
+
+concurrency:
+  group: opencast-rpmbuild
+  cancel-in-progress: false
 
 env:
   OC_VERSION: 14
@@ -14,8 +22,8 @@ jobs:
     strategy:
       matrix:
         osversion:
-          - "8"
-          - "9"
+          - 8
+          - 9
     name: build (el${{ matrix.osversion }})
     runs-on: ubuntu-latest
     container:
@@ -71,11 +79,6 @@ jobs:
           echo "%octarversion ${OC_VERSION}-SNAPSHOT" >> ~/.rpmmacros
           echo "%ocversion ${OC_VERSION}" >> ~/.rpmmacros
           echo "%ocrelease 0.$(date +%Y%m%d%H%M%S)" >> ~/.rpmmacros
-
-      - name: build repository rpm
-        working-directory: /github/home/rpmbuild/SPECS
-        run: |
-          rpmbuild -ba opencast-repository.spec
 
       - name: build rpms
         working-directory: /github/home/rpmbuild/SPECS

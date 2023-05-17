@@ -1,0 +1,22 @@
+#!/bin/sh
+
+set -eux
+
+# Check that we got two arguments
+if [ $# -lt 1 ]; then
+	 echo "Usage: $0 S3-path"
+	 exit 1
+fi
+
+# Store S3 path
+S3PATH="${1%/}"
+
+# Ensure the S3 path contains a valid repository.
+if ! s3cmd ls "${S3PATH}/repodata/repomd.xml" | grep repomd.xml
+then
+	REPO="$(mktemp --directory)"
+	cd "${REPO}"
+	createrepo .
+	s3cmd put --acl-public -r * "${S3PATH}/"
+	rm -rf "${REPO}"
+fi
