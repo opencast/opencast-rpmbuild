@@ -131,4 +131,4 @@ jobs:
       - name: publish repository rpm
         working-directory: /github/home/rpmbuild/RPMS/
         run: |
-          createrepo-s3 noarch/ "s3://opencast-rpm/nightly/${{ matrix.osversion }}/oc-14/noarch/"
+          createrepo-s3 noarch/ "s3://opencast-rpm/nightly/${{ matrix.osversion }}/oc-14/noarch"
