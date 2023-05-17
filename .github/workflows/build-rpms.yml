@@ -124,7 +124,11 @@ jobs:
           echo "secret_key = ${S3_SECRET_KEY}" >> "$HOME/.s3cfg"
           echo "signature_v2 = False" >> "$HOME/.s3cfg"
 
+      - name: install createrepo-s3
+        run: |
+          install -m 0755 -p -D .github/createrepo-s3 /usr/bin/createrepo-s3
+
       - name: publish repository rpm
         working-directory: /github/home/rpmbuild/RPMS/
         run: |
-          .github/createrepo-s3 noarch/ "s3://opencast-rpm/nightly/${{ matrix.osversion }}/oc-14/noarch/"
+          createrepo-s3 noarch/ "s3://opencast-rpm/nightly/${{ matrix.osversion }}/oc-14/noarch/"
