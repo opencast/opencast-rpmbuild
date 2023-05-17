@@ -23,7 +23,6 @@ jobs:
     strategy:
       matrix:
         osversion:
-          - 7
           - 8
           - 9
     name: build (el${{ matrix.osversion }})

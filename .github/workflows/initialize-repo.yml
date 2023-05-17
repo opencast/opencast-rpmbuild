@@ -49,10 +49,14 @@ jobs:
         run: |
           ensurerepo-s3 "s3://opencast-pkg/rpms/testing/el/${{ matrix.osversion }}/oc-${OC_VERSION}/x86_64"
 
+      - name: initialize testing (noarch)
+        run: |
+          ensurerepo-s3 "s3://opencast-pkg/rpms/testing/el/${{ matrix.osversion }}/oc-${OC_VERSION}/noarch"
+
       - name: initialize release (x86_64)
         run: |
           ensurerepo-s3 "s3://opencast-pkg/rpms/release/el/${{ matrix.osversion }}/oc-${OC_VERSION}/x86_64"
 
       - name: initialize release (noarch)
         run: |
-          ensurerepo-s3 "s3://opencast-pkg/rpms/release/el/${{ matrix.osversion }}/oc-${OC_VERSION}/x86_64"
+          ensurerepo-s3 "s3://opencast-pkg/rpms/release/el/${{ matrix.osversion }}/oc-${OC_VERSION}/noarch"
