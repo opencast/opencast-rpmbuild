@@ -7,6 +7,8 @@ RUN dnf install -y https://pkg.opencast.org/rpms/release/el/9/oc-13/noarch/openc
     dnf-plugins-core \
     rpmdevtools \
     rpmlint \
+	 rpm-sign \
+	 createrepo \
     sudo \
     bzip2 \
     java-11-devel \

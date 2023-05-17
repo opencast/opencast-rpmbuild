@@ -10,6 +10,8 @@ RUN yum -y install \
     yum-utils \
     rpmdevtools \
     rpmlint \
+	 rpm-sign \
+	 createrepo \
     sudo \
     bzip2 \
     java-11-devel \

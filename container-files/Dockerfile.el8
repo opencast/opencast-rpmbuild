@@ -8,6 +8,8 @@ RUN dnf -y install \
     dnf-plugins-core \
     rpmdevtools \
     rpmlint \
+	 rpm-sign \
+	 createrepo \
     sudo \
     bzip2 \
     java-11-devel \
