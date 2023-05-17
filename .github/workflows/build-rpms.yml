@@ -94,6 +94,7 @@ jobs:
           GPG_KEY: ${{ secrets.GPG_KEY_OC14 }}
         run: |
           echo "${GPG_KEY}" | gpg --import
+          echo '%_gpg_name cloud@opencast.org' >> ~/.rpmmacros
 
       - name: sign rpms
         working-directory: /github/home/rpmbuild/RPMS/noarch
