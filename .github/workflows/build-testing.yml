@@ -31,7 +31,26 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: clone opencast
+        run: |
+          git clone --branch r/${OC_VERSION}.x --depth 1 https://github.com/opencast/opencast.git
+
+      - name: check if new version exists
+        id: version-check
+        working-directory: opencast
+        env:
+          S3_HOST: ${{ secrets.S3_HOST }}
+        run: |
+          curl -sO https://${S3_HOST}/opencast-pkg/rpms/testing/el/9/oc-${OC_VERSION}/noarch/latest.commit
+          git rev-parse HEAD > current.commit
+          if diff -q latest.commit current.commit; then
+            echo "new=yes" >> "$GITHUB_OUTPUT"
+          else
+            echo "new=no" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: cache local maven repository
+        if: steps.version-check.outputs.new == 'yes'
         uses: actions/cache@v2
         with:
           path: ~/.m2/repository
@@ -40,19 +59,18 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: clone mvn.opencast.org
+        if: steps.version-check.outputs.new == 'yes'
         run: |
           git clone --depth 1 https://github.com/opencast/mvn.opencast.org.git
 
-      - name: clone opencast
-        run: |
-          git clone --branch r/${OC_VERSION}.x --depth 1 https://github.com/opencast/opencast.git
-
       - name: prepare additional maven repository
+        if: steps.version-check.outputs.new == 'yes'
         working-directory: opencast
         run: |
           sed -i "s#https://mvn.opencast.org/#file://$(readlink -f ../mvn.opencast.org)#" pom.xml
 
       - name: build opencast
+        if: steps.version-check.outputs.new == 'yes'
         working-directory: opencast
         run: >
           mvn
@@ -64,23 +82,27 @@ jobs:
           clean install
 
       - name: list distributions to build
+        if: steps.version-check.outputs.new == 'yes'
         run: |
           find opencast/build/ -type f -name 'opencast-dist-*gz' \
             | sed 's/^.*opencast-dist-\([^-]*\)-.*$/\1/' \
             | tee rpmbuild/SPECS/dists
 
       - name: move build artifacts
+        if: steps.version-check.outputs.new == 'yes'
         run: |
           cp -rv rpmbuild/ ~
           mv -v opencast/build/opencast-dist-*.tar.gz ~/rpmbuild/SOURCES/
 
       - name: define rpm version
+        if: steps.version-check.outputs.new == 'yes'
         run: |
           echo "%octarversion ${OC_VERSION}-SNAPSHOT" >> ~/.rpmmacros
           echo "%ocversion ${OC_VERSION}" >> ~/.rpmmacros
           echo "%ocrelease 0.$(date +%Y%m%d%H%M%S)" >> ~/.rpmmacros
 
       - name: build rpms
+        if: steps.version-check.outputs.new == 'yes'
         working-directory: /github/home/rpmbuild/SPECS
         run: |
           for dist in $(cat dists); do
@@ -88,11 +110,13 @@ jobs:
           done
 
       - name: list rpms
+        if: steps.version-check.outputs.new == 'yes'
         working-directory: /github/home/rpmbuild/RPMS/noarch
         run: |
           du -hs opencast*.rpm
 
       - name: prepare gpg
+        if: steps.version-check.outputs.new == 'yes'
         env:
           GPG_KEY: ${{ secrets.GPG_KEY_OC14 }}
         run: |
@@ -100,11 +124,13 @@ jobs:
           echo '%_gpg_name cloud@opencast.org' >> ~/.rpmmacros
 
       - name: sign rpms
+        if: steps.version-check.outputs.new == 'yes'
         working-directory: /github/home/rpmbuild/RPMS/noarch
         run: |
           rpmsign --addsign *.rpm
 
       - name: configure s3cmd
+        if: steps.version-check.outputs.new == 'yes'
         env:
           S3_HOST: ${{ secrets.S3_HOST }}
           S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
@@ -119,10 +145,18 @@ jobs:
           echo "signature_v2 = False" >> "$HOME/.s3cfg"
 
       - name: install createrepo-s3
+        if: steps.version-check.outputs.new == 'yes'
         run: |
           install -m 0755 -p -D .github/createrepo-s3 /usr/bin/createrepo-s3
 
       - name: publish repository rpm
+        if: steps.version-check.outputs.new == 'yes'
         working-directory: /github/home/rpmbuild/RPMS/
         run: |
-          createrepo-s3 noarch/ "s3://opencast-pkg/rpms/testing/el/${{ matrix.osversion }}/oc-14/noarch"
+          createrepo-s3 noarch/ "s3://opencast-pkg/rpms/testing/el/${{ matrix.osversion }}/oc-${OC_VERSION}/noarch"
+
+      - name: keep track of latest vuild
+        if: steps.version-check.outputs.new == 'yes'
+        working-directory: opencast
+        run: |
+          s3cmd put -P current.commit "s3://opencast-pkg/rpms/testing/el/${{ matrix.osversion }}/oc-${OC_VERSION}/noarch/latest.commit"
