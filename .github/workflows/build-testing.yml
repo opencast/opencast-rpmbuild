@@ -44,9 +44,9 @@ jobs:
           curl -sO https://${S3_HOST}/opencast-pkg/rpms/testing/el/9/oc-${OC_VERSION}/noarch/latest.commit
           git rev-parse HEAD > current.commit
           if diff -q latest.commit current.commit; then
-            echo "new=yes" >> "$GITHUB_OUTPUT"
-          else
             echo "new=no" >> "$GITHUB_OUTPUT"
+          else
+            echo "new=yes" >> "$GITHUB_OUTPUT"
           fi
 
       - name: cache local maven repository
