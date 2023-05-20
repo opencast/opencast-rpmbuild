@@ -41,7 +41,7 @@ jobs:
         env:
           S3_HOST: ${{ secrets.S3_HOST }}
         run: |
-          curl -sO https://${S3_HOST}/opencast-pkg/rpms/testing/el/9/oc-${OC_VERSION}/noarch/latest.commit
+          curl -sO https://${S3_HOST}/opencast-pkg/rpms/testing/el/${{ matrix.osversion }}/oc-${OC_VERSION}/noarch/latest.commit
           git rev-parse HEAD > current.commit
           if diff -q latest.commit current.commit; then
             echo "new=no" >> "$GITHUB_OUTPUT"
