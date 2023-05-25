@@ -9,6 +9,10 @@ on:
       - .github/workflows/build-ffmpeg-rpms.yml
       - rpmbuild/SPECS/ffmpeg-static.spec
 
+concurrency:
+  group: opencast-rpmbuild
+  cancel-in-progress: false
+
 jobs:
   build:
     strategy:
