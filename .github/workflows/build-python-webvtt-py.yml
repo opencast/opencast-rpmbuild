@@ -27,7 +27,7 @@ jobs:
     name: build (el${{ matrix.osversion }})
     runs-on: ubuntu-latest
     container:
-      image: docker.io/lkiesow/opencast-rpmbuild:el${{ matrix.osversion }}-oc13.2
+      image: docker.io/lkiesow/opencast-rpmbuild:el${{ matrix.osversion }}-oc14
     steps:
       - uses: actions/checkout@v3
 
