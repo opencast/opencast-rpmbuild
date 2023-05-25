@@ -30,6 +30,7 @@ Source1:       jetty.xml
 Source2:       opencast.logrotate
 Source3:       org.apache.aries.transaction.cfg
 Source4:       org.apache.karaf.shell.cfg
+Source5:       jetty-web.xml
 
 BuildRequires: tar
 BuildRequires: gzip
@@ -117,6 +118,7 @@ ln -s %{_sharedstatedir}/opencast/instances \
 # Add custom jetty.xml
 # Otherwise Karaf will attempt to do that and fail to start
 cp %{SOURCE1} %{buildroot}%{_sysconfdir}/opencast/jetty.xml
+cp %{SOURCE5} %{buildroot}%{_sysconfdir}/opencast/jetty-web.xml
 
 # Install logrotate configuration
 install -p -D -m 0644 %{SOURCE2} \
