@@ -1,4 +1,4 @@
-name: Build Opensearch RPMs
+name: Build OpenSearch RPMs
 
 on:
   workflow_dispatch:

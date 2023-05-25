@@ -74,6 +74,6 @@ jobs:
           install -m 0755 -p -D .github/createrepo-s3 /usr/bin/createrepo-s3
 
       - name: publish repository rpm
-        working-directory: rpmbuild/RPMS/x86_64
+        working-directory: rpmbuild/RPMS
         run: |
           createrepo-s3 x86_64/ "s3://opencast-pkg/rpms/testing/el/${{ matrix.osversion }}/oc-14/x86_64"
