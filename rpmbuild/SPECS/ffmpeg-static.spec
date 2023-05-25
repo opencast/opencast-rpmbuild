@@ -2,8 +2,8 @@
 %global debug_package %{nil}
 %global __os_install_post %{nil}
 
-%define  date      20221212044324
-%define  nversion  N-109406-gc3e20f78b0
+%define  date      20221226041111
+%define  nversion  N-109457-geeb280f351
 
 Name:          ffmpeg
 Summary:       Hyper fast MPEG1/MPEG4/H263/RV and AC3/MPEG audio encoder
