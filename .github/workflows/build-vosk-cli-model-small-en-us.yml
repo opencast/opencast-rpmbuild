@@ -1,0 +1,92 @@
+name: Build vosk-cli-model-small-en-us
+
+env:
+  package: vosk-cli-model-small-en-us
+  arch: noarch
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'r/*'
+    paths:
+      - .github/workflows/build-vosk-cli-model-small-en-us.yml
+      - rpmbuild/SPECS/vosk-cli-model-small-en-us.spec
+
+concurrency:
+  group: opencast-rpmbuild
+  cancel-in-progress: false
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        osversion:
+          - 8
+          - 9
+    name: build (el${{ matrix.osversion }})
+    runs-on: ubuntu-latest
+    container:
+      image: docker.io/lkiesow/opencast-rpmbuild:el${{ matrix.osversion }}-oc14
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: mimic rpmdev-setuptree
+        working-directory: rpmbuild
+        run: |
+          ln -s "$(pwd)" ~/rpmbuild
+
+      - name: download sources
+        working-directory: rpmbuild/SPECS
+        run: |
+          spectool -g -R ${{ env.package }}.spec
+
+      - name: install dependencies
+        working-directory: rpmbuild/SPECS
+        run: |
+          dnf builddep -y ${{ env.package }}.spec
+
+      - name: build rpm
+        working-directory: rpmbuild/SPECS
+        run: |
+          rpmbuild -ba ${{ env.package }}.spec
+
+      - name: list rpms
+        working-directory: rpmbuild/RPMS/${{ env.arch }}
+        run: |
+          du -hs ./*.rpm
+
+      - name: prepare gpg
+        env:
+          GPG_KEY: ${{ secrets.GPG_KEY_OC14 }}
+        run: |
+          echo "${GPG_KEY}" | gpg --import
+          echo '%_gpg_name cloud@opencast.org' >> ~/.rpmmacros
+
+      - name: sign rpms
+        working-directory: rpmbuild/RPMS/${{ env.arch }}
+        run: |
+          rpmsign --addsign *.rpm
+
+      - name: configure s3cmd
+        env:
+          S3_HOST: ${{ secrets.S3_HOST }}
+          S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
+          S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
+        run: |
+          echo "host_base = ${S3_HOST}" > "$HOME/.s3cfg"
+          echo "host_bucket = ${S3_HOST}" >> "$HOME/.s3cfg"
+          echo "bucket_location = us-east-1" >> "$HOME/.s3cfg"
+          echo "use_https = True" >> "$HOME/.s3cfg"
+          echo "access_key = ${S3_ACCESS_KEY}" >> "$HOME/.s3cfg"
+          echo "secret_key = ${S3_SECRET_KEY}" >> "$HOME/.s3cfg"
+          echo "signature_v2 = False" >> "$HOME/.s3cfg"
+
+      - name: install createrepo-s3
+        run: |
+          install -m 0755 -p -D .github/createrepo-s3 /usr/bin/createrepo-s3
+
+      - name: publish repository rpm
+        working-directory: rpmbuild/RPMS
+        run: |
+          createrepo-s3 "${{ env.arch }}/" "s3://opencast-pkg/rpms/release/el/${{ matrix.osversion }}/oc-14/${{ env.arch }}"
