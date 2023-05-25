@@ -48,7 +48,7 @@ jobs:
       - name: sign rpms
         working-directory: x86_64
         run: |
-          rpmsign --addsign opensearch-oss-*.rpm
+          rpmsign --addsign opensearch-*.rpm
 
       - name: configure s3cmd
         env:
