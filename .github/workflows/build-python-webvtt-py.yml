@@ -13,6 +13,10 @@ on:
       - .github/workflows/build-python-webvtt-py.yml
       - rpmbuild/SPECS/python-webvtt-py.spec
 
+concurrency:
+  group: opencast-rpmbuild
+  cancel-in-progress: false
+
 jobs:
   build:
     strategy:
