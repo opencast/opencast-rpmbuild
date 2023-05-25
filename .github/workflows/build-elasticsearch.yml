@@ -70,4 +70,4 @@ jobs:
 
       - name: publish repository rpm
         run: |
-          createrepo-s3 x86_64/ "s3://opencast-pkg/rpms/testing/el/${{ matrix.osversion }}/oc-${OC_VERSION}/x86_64"
+          createrepo-s3 x86_64/ "s3://opencast-pkg/rpms/release/el/${{ matrix.osversion }}/oc-${OC_VERSION}/x86_64"
