@@ -13,6 +13,8 @@ on:
       - .github/workflows/build-python-vosk.yml
       - rpmbuild/SPECS/python-vosk.spec
 
+concurrency: opencast-rpmbuild
+
 jobs:
   build:
     strategy:
