@@ -28,7 +28,7 @@ jobs:
 
       - name: install dependencies
         run: >
-          sudo apt install s3fs createrepo
+          sudo apt install s3fs createrepo-c
 
       - name: create repository directory
         run: |
