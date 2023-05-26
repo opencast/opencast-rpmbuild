@@ -62,5 +62,4 @@ jobs:
       - name: update repository metadata
         working-directory: repository/rpms/${{ matrix.repo }}/el/${{ matrix.osversion }}/oc-${{ env.OC_VERSION }}/${{ matrix.arch }}
         run: |
-          rm -rf .repodata/
-          createrepo_c .
+          createrepo_c --update .
