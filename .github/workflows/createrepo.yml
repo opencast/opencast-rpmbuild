@@ -50,7 +50,9 @@ jobs:
           -o passwd_file=.s3fs
           -o use_path_request_style
           -o url=https://${S3_HOST}
+          -o default_acl=public-read
 
       - name: publish repository rpm
         run: |
+          date > repository/date.txt
           ls -lh repository
