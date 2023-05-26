@@ -20,9 +20,16 @@ jobs:
     strategy:
       matrix:
         osversion:
+          - 7
           - 8
           - 9
-    name: createrepo (el${{ matrix.osversion }})
+        repo:
+          - testing
+          - release
+        arch:
+          - noarch
+          - x86_64
+    name: createrepo (el${{ matrix.osversion }}, ${{ matrix.repo }}/${{ matrix.arch }})
     runs-on: ubuntu-latest
     steps:
 
@@ -52,7 +59,8 @@ jobs:
           -o url=https://${S3_HOST}
           -o default_acl=public-read
 
-      - name: publish repository rpm
+      - name: update repository metadata
+        working-directory: repository/rpms/release/el/${{ matrix.osversion }}/oc-${{ env.OC_VERSION }}/${{ matrix.arch }}
         run: |
-          date > repository/date.txt
-          ls -lh repository
+          ls -lh
+          createrepo --update .
