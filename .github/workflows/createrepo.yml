@@ -63,4 +63,4 @@ jobs:
         working-directory: repository/rpms/release/el/${{ matrix.osversion }}/oc-${{ env.OC_VERSION }}/${{ matrix.arch }}
         run: |
           rm -rf .repodata/
-          createrepo_c --update .
+          createrepo_c .
