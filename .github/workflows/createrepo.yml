@@ -60,7 +60,7 @@ jobs:
           -o default_acl=public-read
 
       - name: update repository metadata
-        working-directory: repository/rpms/release/el/${{ matrix.osversion }}/oc-${{ env.OC_VERSION }}/${{ matrix.arch }}
+        working-directory: repository/rpms/${{ matrix.repo }}/el/${{ matrix.osversion }}/oc-${{ env.OC_VERSION }}/${{ matrix.arch }}
         run: |
           rm -rf .repodata/
           createrepo_c .
