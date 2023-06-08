@@ -59,7 +59,16 @@ jobs:
           -o url=https://${S3_HOST}
           -o default_acl=public-read
 
+      - name: create repository folder
+        run: |
+          mkdir -p repository/rpms/${{ matrix.repo }}/el/${{ matrix.osversion }}/oc-${{ env.OC_VERSION }}/${{ matrix.arch }}
+
       - name: update repository metadata
         working-directory: repository/rpms/${{ matrix.repo }}/el/${{ matrix.osversion }}/oc-${{ env.OC_VERSION }}/${{ matrix.arch }}
         run: |
-          createrepo_c --update .
+          set -eu
+          if [ -d repodata ]; then
+            createrepo_c --update .
+          else
+            createrepo_c .
+          fi
