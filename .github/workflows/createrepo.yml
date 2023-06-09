@@ -29,7 +29,7 @@ concurrency:
 
 jobs:
   createrepo:
-    name: createrepo (el${{ matrix.osversion }}, ${{ matrix.repo }}/${{ matrix.arch }})
+    name: createrepo (el${{ inputs.os-version }})
     runs-on: ubuntu-latest
     env:
       s3path: repository/rpms/${{ inputs.repo }}/el/${{ inputs.os-version }}/oc-${{ inputs.oc-version }}/${{ inputs.arch }}
