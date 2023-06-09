@@ -25,7 +25,7 @@ jobs:
     name: createrepo (el${{ matrix.osversion }}, ${{ matrix.repo }}/${{ matrix.arch }})
     runs-on: ubuntu-latest
     env:
-      s3path: repository/rpms/${{ input.repo }}/el/${{ input.os-version }}/oc-${{ inputs.oc-version }}/${{ inputs.arch }}
+      s3path: repository/rpms/${{ inputs.repo }}/el/${{ inputs.os-version }}/oc-${{ inputs.oc-version }}/${{ inputs.arch }}
     steps:
 
       - name: install dependencies
