@@ -90,3 +90,7 @@ jobs:
       os-version: ${{ matrix.os-version }}
       arch: noarch
       repo: release
+    secrets:
+      S3_HOST: ${{ secrets.S3_HOST }}
+      S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
+      S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
