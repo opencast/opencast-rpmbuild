@@ -149,7 +149,7 @@ jobs:
         if: steps.version-check.outputs.new == 'yes'
         working-directory: /github/home/rpmbuild/RPMS/noarch/
         run: |
-          s3cmd put -P *.rpm "s3://opencast-pkg/rpms/testing/el/${{ matrix.osversion }}/oc-${OC_VERSION}/noarch"
+          s3cmd put -P *.rpm "s3://opencast-pkg/rpms/testing/el/${{ matrix.osversion }}/oc-${OC_VERSION}/noarch/"
 
       # keep latest 14 * 6 = 84 builds
       - name: remove old builds
