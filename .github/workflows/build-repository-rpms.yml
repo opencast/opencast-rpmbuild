@@ -74,7 +74,7 @@ jobs:
       - name: publish repository rpm
         working-directory: /github/home/rpmbuild/RPMS/noarch/
         run: |
-          s3cms put -P *.rpm "s3://opencast-pkg/rpms/release/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/noarch/"
+          s3cmd put -P *.rpm "s3://opencast-pkg/rpms/release/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/noarch/"
 
   createrepo:
     uses: opencast/opencast-rpmbuild/.github/workflows/createrepo.yml@r/14.x
