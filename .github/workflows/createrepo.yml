@@ -1,41 +1,31 @@
 name: Update Repository Metadata
 
 on:
-  workflow_dispatch:
-  workflow_run:
-    workflows:
-      - Build Opencast Testing RPMs
-    types:
-      - completed
-  push:
-    branches:
-      - 'r/*'
-    paths:
-      - .github/workflows/createrepo.yml
+  workflow_call:
+    inputs:
+      oc-version:
+        required: true
+        type: string
+      os-version:
+        required: true
+        type: string
+      arch:
+        required: true
+        type: string
+      repo:
+        required: true
+        type: string
 
 concurrency:
-  group: opencast-rpmbuild
+  group: ${{ inputs.repo }}/${{ inputs.os-version }}/${{ inputs.oc-version }}/${{ inputs.arch }}
   cancel-in-progress: false
 
-env:
-  OC_VERSION: 14
-
 jobs:
-  build:
-    strategy:
-      matrix:
-        osversion:
-          - 7
-          - 8
-          - 9
-        repo:
-          - testing
-          - release
-        arch:
-          - noarch
-          - x86_64
+  createrepo:
     name: createrepo (el${{ matrix.osversion }}, ${{ matrix.repo }}/${{ matrix.arch }})
     runs-on: ubuntu-latest
+    env:
+      s3path: repository/rpms/${{ input.repo }}/el/${{ input.os-version }}/oc-${{ inputs.oc-version }}/${{ inputs.arch }}
     steps:
 
       - name: install dependencies
@@ -66,10 +56,10 @@ jobs:
 
       - name: create repository folder
         run: |
-          mkdir -p repository/rpms/${{ matrix.repo }}/el/${{ matrix.osversion }}/oc-${{ env.OC_VERSION }}/${{ matrix.arch }}
+          mkdir -p "${s3path}"
 
       - name: update repository metadata
-        working-directory: repository/rpms/${{ matrix.repo }}/el/${{ matrix.osversion }}/oc-${{ env.OC_VERSION }}/${{ matrix.arch }}
+        working-directory: ${{ env.s3path }}
         run: |
           set -eu
           if [ -d repodata ]; then
