@@ -7,7 +7,7 @@ on:
       - 'r/*'
     paths:
       - oc.version
-      - .github/workflows/build-testing.yml
+      - .github/workflows/build-opencast-testing.yml
       - rpmbuild/SOURCES/*
       - rpmbuild/SPECS/opencast.spec
 
