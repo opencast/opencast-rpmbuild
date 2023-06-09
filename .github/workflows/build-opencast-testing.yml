@@ -6,16 +6,10 @@ on:
     branches:
       - 'r/*'
     paths:
+      - oc.version
       - .github/workflows/build-testing.yml
       - rpmbuild/SOURCES/*
       - rpmbuild/SPECS/opencast.spec
-
-concurrency:
-  group: opencast-rpmbuild
-  cancel-in-progress: false
-
-env:
-  OC_VERSION: 14
 
 jobs:
   build:
@@ -25,6 +19,8 @@ jobs:
           - 7
           - 8
           - 9
+    outputs:
+      oc-version: ${{ steps.version.outputs.version }}
     name: build (el${{ matrix.osversion }})
     runs-on: ubuntu-latest
     container:
@@ -32,9 +28,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - id: version
+        run: echo "version=$(cat oc.version)" >> $GITHUB_OUTPUT
+
       - name: clone opencast
         run: |
-          git clone --branch r/${OC_VERSION}.x --depth 1 https://github.com/opencast/opencast.git
+          git clone --branch r/$(cat oc.version).x --depth 1 https://github.com/opencast/opencast.git
 
       - name: check if new version exists
         id: version-check
@@ -42,7 +41,7 @@ jobs:
         env:
           S3_HOST: ${{ secrets.S3_HOST }}
         run: |
-          curl -sO https://${S3_HOST}/opencast-pkg/rpms/testing/el/${{ matrix.osversion }}/oc-${OC_VERSION}/noarch/latest.commit
+          curl -sO https://${S3_HOST}/opencast-pkg/rpms/testing/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/noarch/latest.commit
           git rev-parse HEAD > current.commit
           if diff -q latest.commit current.commit; then
             echo "new=no" >> "$GITHUB_OUTPUT"
@@ -98,8 +97,8 @@ jobs:
       - name: define rpm version
         if: steps.version-check.outputs.new == 'yes'
         run: |
-          echo "%octarversion ${OC_VERSION}-SNAPSHOT" >> ~/.rpmmacros
-          echo "%ocversion ${OC_VERSION}" >> ~/.rpmmacros
+          echo "%octarversion ${{ steps.version.outputs.version }}-SNAPSHOT" >> ~/.rpmmacros
+          echo "%ocversion ${{ steps.version.outputs.version }}" >> ~/.rpmmacros
           echo "%ocrelease 0.$(date +%Y%m%d%H%M%S)" >> ~/.rpmmacros
 
       - name: build rpms
@@ -149,13 +148,13 @@ jobs:
         if: steps.version-check.outputs.new == 'yes'
         working-directory: /github/home/rpmbuild/RPMS/noarch/
         run: |
-          s3cmd put -P *.rpm "s3://opencast-pkg/rpms/testing/el/${{ matrix.osversion }}/oc-${OC_VERSION}/noarch/"
+          s3cmd put -P *.rpm "s3://opencast-pkg/rpms/testing/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/noarch/"
 
       # keep latest 14 * 6 = 84 builds
       - name: remove old builds
         if: steps.version-check.outputs.new == 'yes'
         run: |
-          s3cmd ls "s3://opencast-pkg/rpms/testing/el/${{ matrix.osversion }}/oc-${OC_VERSION}/noarch/opencast-" |\
+          s3cmd ls "s3://opencast-pkg/rpms/testing/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/noarch/opencast-" |\
             sort |\
             head -n -84 |\
             sed 's_^.*s3://_s3://_' |\
@@ -168,4 +167,23 @@ jobs:
         if: steps.version-check.outputs.new == 'yes'
         working-directory: opencast
         run: |
-          s3cmd put -P current.commit "s3://opencast-pkg/rpms/testing/el/${{ matrix.osversion }}/oc-${OC_VERSION}/noarch/latest.commit"
+          s3cmd put -P current.commit "s3://opencast-pkg/rpms/testing/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/noarch/latest.commit"
+
+  createrepo:
+    uses: opencast/opencast-rpmbuild/.github/workflows/createrepo.yml@r/14.x
+    needs: build
+    strategy:
+      matrix:
+        os-version:
+          - 7
+          - 8
+          - 9
+    with:
+      oc-version: ${{ needs.build.outputs.oc-version }}
+      os-version: ${{ matrix.os-version }}
+      arch: noarch
+      repo: release
+    secrets:
+      S3_HOST: ${{ secrets.S3_HOST }}
+      S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
+      S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
