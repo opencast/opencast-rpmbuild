@@ -6,6 +6,7 @@ on:
     branches:
       - 'r/*'
     paths:
+      - oc.version
       - .github/workflows/build-repository-rpms.yml
       - rpmbuild/SOURCES/opencast.repo
       - rpmbuild/SOURCES/opencast-testing.repo
