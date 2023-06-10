@@ -1,5 +1,9 @@
 name: Build Opencast Testing RPMs
 
+env:
+  arch: noarch
+  repo: testing
+
 on:
   workflow_dispatch:
   schedule:
@@ -23,6 +27,8 @@ jobs:
           - 9
     outputs:
       oc-version: ${{ steps.version.outputs.version }}
+      arch: ${{ env.arch }}
+      repo: ${{ env.repo }}
     name: build (el${{ matrix.osversion }})
     runs-on: ubuntu-latest
     container:
@@ -43,7 +49,7 @@ jobs:
         env:
           S3_HOST: ${{ secrets.S3_HOST }}
         run: |
-          curl -sO https://${S3_HOST}/opencast-pkg/rpms/testing/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/noarch/latest.commit
+          curl -sO https://${S3_HOST}/opencast-pkg/rpms/${{ env.repo }}/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/${{ env.arch }}/latest.commit
           git rev-parse HEAD > current.commit
           if diff -q latest.commit current.commit; then
             echo "new=no" >> "$GITHUB_OUTPUT"
@@ -90,11 +96,16 @@ jobs:
             | sed 's/^.*opencast-dist-\([^-]*\)-.*$/\1/' \
             | tee rpmbuild/SPECS/dists
 
+      - name: mimic rpmdev-setuptree
+        if: steps.version-check.outputs.new == 'yes'
+        working-directory: rpmbuild
+        run: |
+          ln -s "$(pwd)" ~/rpmbuild
+
       - name: move build artifacts
         if: steps.version-check.outputs.new == 'yes'
         run: |
-          cp -rv rpmbuild/ ~
-          mv -v opencast/build/opencast-dist-*.tar.gz ~/rpmbuild/SOURCES/
+          mv -v opencast/build/opencast-dist-*.tar.gz rpmbuild/SOURCES/
 
       - name: define rpm version
         if: steps.version-check.outputs.new == 'yes'
@@ -103,9 +114,9 @@ jobs:
           echo "%ocversion ${{ steps.version.outputs.version }}" >> ~/.rpmmacros
           echo "%ocrelease 0.$(date +%Y%m%d%H%M%S)" >> ~/.rpmmacros
 
-      - name: build rpms
+      - name: build rpm
         if: steps.version-check.outputs.new == 'yes'
-        working-directory: /github/home/rpmbuild/SPECS
+        working-directory: rpmbuild/SPECS
         run: |
           for dist in $(cat dists); do
             rpmbuild -ba -D "ocdist ${dist}" opencast.spec
@@ -113,9 +124,9 @@ jobs:
 
       - name: list rpms
         if: steps.version-check.outputs.new == 'yes'
-        working-directory: /github/home/rpmbuild/RPMS/noarch
+        working-directory: rpmbuild/RPMS/${{ env.arch }}
         run: |
-          du -hs opencast*.rpm
+          du -hs ./*.rpm
 
       - name: prepare gpg
         if: steps.version-check.outputs.new == 'yes'
@@ -127,7 +138,7 @@ jobs:
 
       - name: sign rpms
         if: steps.version-check.outputs.new == 'yes'
-        working-directory: /github/home/rpmbuild/RPMS/noarch
+        working-directory: rpmbuild/RPMS/${{ env.arch }}
         run: |
           rpmsign --addsign *.rpm
 
@@ -148,15 +159,15 @@ jobs:
 
       - name: publish repository rpm
         if: steps.version-check.outputs.new == 'yes'
-        working-directory: /github/home/rpmbuild/RPMS/noarch/
+        working-directory: rpmbuild/RPMS/${{ env.arch }}
         run: |
-          s3cmd put -P *.rpm "s3://opencast-pkg/rpms/testing/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/noarch/"
+          s3cmd put -P *.rpm "s3://opencast-pkg/rpms/${{ env.repo }}/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/${{ env.arch }}/"
 
       # keep latest 14 * 6 = 84 builds
       - name: remove old builds
         if: steps.version-check.outputs.new == 'yes'
         run: |
-          s3cmd ls "s3://opencast-pkg/rpms/testing/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/noarch/opencast-" |\
+          s3cmd ls "s3://opencast-pkg/rpms/${{ env.repo }}/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/${{ env.arch }}/opencast-" |\
             sort |\
             head -n -84 |\
             sed 's_^.*s3://_s3://_' |\
@@ -169,7 +180,7 @@ jobs:
         if: steps.version-check.outputs.new == 'yes'
         working-directory: opencast
         run: |
-          s3cmd put -P current.commit "s3://opencast-pkg/rpms/testing/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/noarch/latest.commit"
+          s3cmd put -P current.commit "s3://opencast-pkg/rpms/${{ env.repo }}/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/${{ env.arch }}/latest.commit"
 
   createrepo:
     uses: opencast/opencast-rpmbuild/.github/workflows/createrepo.yml@r/14.x
@@ -183,8 +194,8 @@ jobs:
     with:
       oc-version: ${{ needs.build.outputs.oc-version }}
       os-version: ${{ matrix.os-version }}
-      arch: noarch
-      repo: release
+      arch: ${{ needs.build.outputs.arch }}
+      repo: ${{ needs.build.outputs.repo }}
     secrets:
       S3_HOST: ${{ secrets.S3_HOST }}
       S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}

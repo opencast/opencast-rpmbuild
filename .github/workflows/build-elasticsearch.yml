@@ -66,7 +66,7 @@ jobs:
 
       - name: publish repository rpm
         run: |
-          s3cmd put -P *.rpm "s3://opencast-pkg/rpms/release/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/${{ env.arch }}/"
+          s3cmd put -P *.rpm "s3://opencast-pkg/rpms/${{ env.repo }}/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/${{ env.arch }}/"
 
   createrepo:
     uses: opencast/opencast-rpmbuild/.github/workflows/createrepo.yml@r/14.x

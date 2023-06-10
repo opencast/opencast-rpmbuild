@@ -65,12 +65,11 @@ jobs:
         run: |
           mkdir -p "${s3path}"
 
+      # Createrepo should never run in parallel
+      # If .repodata/ exists, it should be a failure from a broken run
+      # It should be safe to remove the folder
       - name: update repository metadata
         working-directory: ${{ env.s3path }}
         run: |
-          set -eu
-          if [ -d repodata ]; then
-            createrepo_c --update .
-          else
-            createrepo_c .
-          fi
+          rm -rf .repodata
+          createrepo_c .
