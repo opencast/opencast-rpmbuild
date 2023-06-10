@@ -29,6 +29,7 @@ jobs:
       oc-version: ${{ steps.version.outputs.version }}
       arch: ${{ env.arch }}
       repo: ${{ env.repo }}
+      new: ${{ steps.version-check.outputs.new }}
     name: build (el${{ matrix.osversion }})
     runs-on: ubuntu-latest
     container:
@@ -184,6 +185,7 @@ jobs:
 
   createrepo:
     uses: opencast/opencast-rpmbuild/.github/workflows/createrepo.yml@r/14.x
+    if: ${{ needs.build.outputs.new == 'yes' }}
     needs: build
     strategy:
       matrix:
