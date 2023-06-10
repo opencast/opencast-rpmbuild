@@ -1,6 +1,7 @@
 name: Build FFmpeg RPMs
 
 env:
+  package: ffmpeg-static
   arch: x86_64
   repo: release
 
@@ -24,7 +25,9 @@ jobs:
           - 9
     outputs:
       oc-version: ${{ steps.version.outputs.version }}
-    name: build (${{ matrix.osversion }})
+      arch: ${{ env.arch}}
+      repo: ${{ env.repo }}
+    name: build (el${{ matrix.osversion }})
     runs-on: ubuntu-latest
     container:
       image: docker.io/lkiesow/opencast-rpmbuild:el${{ matrix.osversion }}-oc14
@@ -39,15 +42,15 @@ jobs:
         run: |
           ln -s "$(pwd)" ~/rpmbuild
 
-      - name: download static-ffmpeg
+      - name: download sources
         working-directory: rpmbuild/SPECS
         run: |
-          spectool -g -R ffmpeg-static.spec
+          spectool -g -R ${{ env.package }}.spec
 
-      - name: build ffmpeg rpm
+      - name: build rpm
         working-directory: rpmbuild/SPECS
         run: |
-          rpmbuild -ba ffmpeg-static.spec
+          rpmbuild -ba ${{ env.package }}.spec
 
       - name: list rpms
         working-directory: rpmbuild/RPMS/${{ env.arch }}
@@ -83,7 +86,7 @@ jobs:
       - name: publish repository rpm
         working-directory: rpmbuild/RPMS/${{ env.arch }}
         run: |
-          s3cmd put -P *.rpm "s3://opencast-pkg/rpms/release/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/${{ env.arch }}/"
+          s3cmd put -P *.rpm "s3://opencast-pkg/rpms/${{ env.repo }}/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/${{ env.arch }}/"
 
   createrepo:
     uses: opencast/opencast-rpmbuild/.github/workflows/createrepo.yml@r/14.x
@@ -97,8 +100,8 @@ jobs:
     with:
       oc-version: ${{ needs.build.outputs.oc-version }}
       os-version: ${{ matrix.os-version }}
-      arch: ${{ env.arch }}
-      repo: ${{ env.repo }}
+      arch: ${{ needs.build.outputs.arch }}
+      repo: ${{ needs.build.outputs.repo }}
     secrets:
       S3_HOST: ${{ secrets.S3_HOST }}
       S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}

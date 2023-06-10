@@ -24,6 +24,8 @@ jobs:
           - 9
     outputs:
       oc-version: ${{ steps.version.outputs.version }}
+      arch: ${{ env.arch}}
+      repo: ${{ env.repo }}
     name: build (el${{ matrix.osversion }})
     runs-on: ubuntu-latest
     container:
@@ -101,8 +103,8 @@ jobs:
     with:
       oc-version: ${{ needs.build.outputs.oc-version }}
       os-version: ${{ matrix.os-version }}
-      arch: ${{ env.arch }}
-      repo: ${{ env.repo }}
+      arch: ${{ needs.build.outputs.arch }}
+      repo: ${{ needs.build.outputs.repo }}
     secrets:
       S3_HOST: ${{ secrets.S3_HOST }}
       S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
