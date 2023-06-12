@@ -12,6 +12,7 @@ on:
     branches:
       - 'r/*'
     paths:
+      - .trigger
       - oc.version
       - .github/workflows/build-opencast-testing.yml
       - rpmbuild/SOURCES/*
@@ -143,20 +144,12 @@ jobs:
         run: |
           rpmsign --addsign *.rpm
 
-      - name: configure s3cmd
+      - uses: lkiesow/configure-s3cmd@v1
         if: steps.version-check.outputs.new == 'yes'
-        env:
-          S3_HOST: ${{ secrets.S3_HOST }}
-          S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
-          S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
-        run: |
-          echo "host_base = ${S3_HOST}" > "$HOME/.s3cfg"
-          echo "host_bucket = ${S3_HOST}" >> "$HOME/.s3cfg"
-          echo "bucket_location = us-east-1" >> "$HOME/.s3cfg"
-          echo "use_https = True" >> "$HOME/.s3cfg"
-          echo "access_key = ${S3_ACCESS_KEY}" >> "$HOME/.s3cfg"
-          echo "secret_key = ${S3_SECRET_KEY}" >> "$HOME/.s3cfg"
-          echo "signature_v2 = False" >> "$HOME/.s3cfg"
+        with:
+          host: ${{ secrets.S3_HOST }}
+          access_key: ${{ secrets.S3_ACCESS_KEY }}
+          secret_key: ${{ secrets.S3_SECRET_KEY }}
 
       - name: publish repository rpm
         if: steps.version-check.outputs.new == 'yes'
