@@ -60,6 +60,7 @@ jobs:
 
       - name: switch to tagged opencast version
         if: steps.version-check.outputs.new == 'yes'
+        working-directory: opencast
         run: >
           git checkout "$(cat latest.version)"
 
@@ -115,6 +116,7 @@ jobs:
 
       - name: define rpm version
         if: steps.version-check.outputs.new == 'yes'
+        working-directory: opencast
         run: |
           echo "%octarversion ${{ steps.version.outputs.version }}.$(cat latest.version)" >> ~/.rpmmacros
           echo "%ocversion ${{ steps.version.outputs.version }}.$(cat latest.version)" >> ~/.rpmmacros
