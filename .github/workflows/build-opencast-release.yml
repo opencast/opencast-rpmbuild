@@ -118,8 +118,8 @@ jobs:
         if: steps.version-check.outputs.new == 'yes'
         working-directory: opencast
         run: |
-          echo "%octarversion ${{ steps.version.outputs.version }}.$(cat latest.version)" >> ~/.rpmmacros
-          echo "%ocversion ${{ steps.version.outputs.version }}.$(cat latest.version)" >> ~/.rpmmacros
+          echo "%octarversion $(cat latest.version)" >> ~/.rpmmacros
+          echo "%ocversion $(cat latest.version)" >> ~/.rpmmacros
           echo "%ocrelease 1" >> ~/.rpmmacros
 
       - name: build rpm
