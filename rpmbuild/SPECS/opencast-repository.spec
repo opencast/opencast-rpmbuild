@@ -28,11 +28,14 @@ equivalent distributions.
 
 
 %build
+cp %{SOURCE0} .
+cp %{SOURCE1} .
+sed -i s/OC_VERSION/%{version}/ *.repo
 
 
 %install
-install -m 0644 -p -D %{SOURCE0} %{buildroot}%{_sysconfdir}/yum.repos.d/opencast.repo
-install -m 0644 -p -D %{SOURCE1} %{buildroot}%{_sysconfdir}/yum.repos.d/opencast-testing.repo
+install -m 0644 -p -D opencast.repo %{buildroot}%{_sysconfdir}/yum.repos.d/opencast.repo
+install -m 0644 -p -D opencast-testing.repo %{buildroot}%{_sysconfdir}/yum.repos.d/opencast-testing.repo
 
 
 %clean
@@ -45,6 +48,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Aug 10 2023 Lars Kiesow <lkiesow@uos.de> - -1
+- Dynamic versioning
+
 * Wed May 17 2023 Lars Kiesow <lkiesow@uos.de> - 14-1
 - Opencast 14 repository
 

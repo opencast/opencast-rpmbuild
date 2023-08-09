@@ -133,7 +133,7 @@ jobs:
       - name: prepare gpg
         if: steps.version-check.outputs.new == 'yes'
         env:
-          GPG_KEY: ${{ secrets.GPG_KEY_OC14 }}
+          GPG_KEY: ${{ secrets.GPG_KEY_OC15 }}
         run: |
           echo "${GPG_KEY}" | gpg --import
           echo '%_gpg_name cloud@opencast.org' >> ~/.rpmmacros
@@ -177,7 +177,7 @@ jobs:
           s3cmd put -P current.commit "s3://opencast-pkg/rpms/${{ env.repo }}/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/${{ env.arch }}/latest.commit"
 
   createrepo:
-    uses: opencast/opencast-rpmbuild/.github/workflows/createrepo.yml@r/14.x
+    uses: opencast/opencast-rpmbuild/.github/workflows/createrepo.yml@develop
     if: ${{ needs.build.outputs.new == 'yes' }}
     needs: build
     strategy:
