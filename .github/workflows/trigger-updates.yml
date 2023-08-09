@@ -36,7 +36,7 @@ jobs:
       - name: Switch to release branch
         working-directory: opencast-rpmbuild
         run: |
-          git checkout r/${{ matrix.osversion }}.x
+          git checkout r/${{ matrix.oc-version }}.x
 
       - name: Update trigger
         working-directory: opencast-rpmbuild
@@ -51,4 +51,4 @@ jobs:
       - name: Push trigger
         working-directory: opencast-rpmbuild
         run: |
-          git push origin r/${{ matrix.osversion }}.x
+          git push origin r/${{ matrix.oc-version }}.x
