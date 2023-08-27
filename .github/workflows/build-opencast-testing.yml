@@ -14,6 +14,7 @@ on:
     paths:
       - .trigger
       - oc.version
+      - branch.version
       - .github/workflows/build-opencast-testing.yml
       - rpmbuild/SOURCES/*
       - rpmbuild/SPECS/opencast.spec
@@ -43,7 +44,7 @@ jobs:
 
       - name: clone opencast
         run: |
-          git clone --branch r/$(cat oc.version).x --depth 1 https://github.com/opencast/opencast.git
+          git clone --branch r/$(cat branch.version).x --depth 1 https://github.com/opencast/opencast.git
 
       - name: check if new version exists
         id: version-check
