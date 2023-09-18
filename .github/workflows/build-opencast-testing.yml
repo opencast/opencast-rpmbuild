@@ -44,7 +44,7 @@ jobs:
 
       - name: clone opencast
         run: |
-          git clone --branch $(cat branch.version).x --depth 1 https://github.com/opencast/opencast.git
+          git clone --branch "$(cat branch.version)" --depth 1 https://github.com/opencast/opencast.git
 
       - name: check if new version exists
         id: version-check
