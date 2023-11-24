@@ -139,7 +139,7 @@ jobs:
       - name: prepare gpg
         if: steps.version-check.outputs.new == 'yes'
         env:
-          GPG_KEY: ${{ secrets.GPG_KEY_OC15 }}
+          GPG_KEY: ${{ secrets.GPG_KEY_OC16 }}
         run: |
           echo "${GPG_KEY}" | gpg --import
           echo '%_gpg_name cloud@opencast.org' >> ~/.rpmmacros
