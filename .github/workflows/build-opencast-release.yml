@@ -170,6 +170,7 @@ jobs:
           s3cmd put -P latest.version "s3://opencast-pkg/rpms/${{ env.repo }}/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/${{ env.arch }}/rpm.version"
 
       - name: Setting up matrix-msg
+        if: steps.version-check.outputs.new == 'yes'
         uses: lkiesow/matrix-notification@v1
         with:
           room: '!RACMQVfKRDQTWhdXLa:matrix.org'
@@ -177,6 +178,7 @@ jobs:
           tool: true
 
       - name: Announce new package
+        if: steps.version-check.outputs.new == 'yes'
         working-directory: opencast
         run: >
           echo "Finished building Opencast $(cat latest.version) RPMs (el${{ matrix.osversion }})."
