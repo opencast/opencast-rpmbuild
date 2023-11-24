@@ -52,10 +52,17 @@ jobs:
         run: |
           git tag | grep ^${{ steps.version.outputs.version }} | sort --version-sort | tail -n1 > latest.version
           curl -sO https://${S3_HOST}/opencast-pkg/rpms/release/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/noarch/rpm.version
-          if diff -q latest.version rpm.version; then
-            echo "new=no" >> "$GITHUB_OUTPUT"
+          if grep -q . latest.version; then
+            if diff -q latest.version rpm.version; then
+              echo "Commit $(cat current.commit) already built"
+              echo "new=no" >> "$GITHUB_OUTPUT"
+            else
+              echo "Last built $(cat latest.commit). Building new commit $(cat current.commit)"
+              echo "new=yes" >> "$GITHUB_OUTPUT"
+            fi
           else
-            echo "new=yes" >> "$GITHUB_OUTPUT"
+            echo "No release of Opencast ${{ steps.version.outputs.version }} yet"
+            echo "new=no" >> "$GITHUB_OUTPUT"
           fi
 
       - name: switch to tagged opencast version
@@ -168,6 +175,21 @@ jobs:
         working-directory: opencast
         run: |
           s3cmd put -P latest.version "s3://opencast-pkg/rpms/${{ env.repo }}/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/${{ env.arch }}/rpm.version"
+
+      - name: Setting up matrix-msg
+        if: steps.version-check.outputs.new == 'yes'
+        uses: lkiesow/matrix-notification@v1
+        with:
+          room: '!RACMQVfKRDQTWhdXLa:matrix.org'
+          token: ${{ secrets.MATRIX_TOKEN }}
+          tool: true
+
+      - name: Announce new package
+        if: steps.version-check.outputs.new == 'yes'
+        working-directory: opencast
+        run: >
+          echo "Finished building Opencast $(cat latest.version) RPMs (el${{ matrix.osversion }})."
+          "They should be available in a few minutes" | ~/.local/bin/matrix-msg
 
   createrepo:
     uses: opencast/opencast-rpmbuild/.github/workflows/createrepo.yml@develop
