@@ -180,7 +180,7 @@ jobs:
         working-directory: opencast
         run: >
           echo "Finished building Opencast $(cat latest.version) RPMs (el${{ matrix.osversion }})."
-          "They should be available in a few minutes" | matrix-msg
+          "They should be available in a few minutes" | ~/.local/bin/matrix-msg
 
   createrepo:
     uses: opencast/opencast-rpmbuild/.github/workflows/createrepo.yml@r/14.x
