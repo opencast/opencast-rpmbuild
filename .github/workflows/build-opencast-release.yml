@@ -52,10 +52,17 @@ jobs:
         run: |
           git tag | grep ^${{ steps.version.outputs.version }} | sort --version-sort | tail -n1 > latest.version
           curl -sO https://${S3_HOST}/opencast-pkg/rpms/release/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/noarch/rpm.version
-          if diff -q latest.version rpm.version; then
-            echo "new=no" >> "$GITHUB_OUTPUT"
+          if grep -q . latest.version; then
+            if diff -q latest.version rpm.version; then
+              echo "Commit $(cat current.commit) already built"
+              echo "new=no" >> "$GITHUB_OUTPUT"
+            else
+              echo "Last built $(cat latest.commit). Building new commit $(cat current.commit)"
+              echo "new=yes" >> "$GITHUB_OUTPUT"
+            fi
           else
-            echo "new=yes" >> "$GITHUB_OUTPUT"
+            echo "No release of Opencast ${{ steps.version.outputs.version }} yet"
+            echo "new=no" >> "$GITHUB_OUTPUT"
           fi
 
       - name: switch to tagged opencast version
