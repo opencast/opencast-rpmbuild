@@ -55,8 +55,10 @@ jobs:
           curl -sO https://${S3_HOST}/opencast-pkg/rpms/${{ env.repo }}/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/${{ env.arch }}/latest.commit
           git rev-parse HEAD > current.commit
           if diff -q latest.commit current.commit; then
+            echo "Commit $(cat current.commit) already built"
             echo "new=no" >> "$GITHUB_OUTPUT"
           else
+            echo "Last built $(cat latest.commit). Building new commit $(cat current.commit)"
             echo "new=yes" >> "$GITHUB_OUTPUT"
           fi
 
