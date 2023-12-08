@@ -8,19 +8,22 @@ RUN dnf -y install \
     dnf-plugins-core \
     rpmdevtools \
     rpmlint \
-	 rpm-sign \
-	 createrepo \
+    rpm-sign \
+    createrepo \
     sudo \
     bzip2 \
     java-11-devel \
-	 jq \
+    jq \
     sed \
     tar \
     xz \
     gzip \
     git \
-	 s3cmd \
+    s3cmd \
     systemd \
+    gcc-c++ \
+    libstdc++-devel \
+    make \
     && dnf -y clean all
 RUN useradd --no-create-home makerpm
 

@@ -7,8 +7,8 @@ RUN dnf install -y https://pkg.opencast.org/rpms/release/el/9/oc-13/noarch/openc
     dnf-plugins-core \
     rpmdevtools \
     rpmlint \
-	 rpm-sign \
-	 createrepo \
+    rpm-sign \
+    createrepo \
     sudo \
     bzip2 \
     java-11-devel \
@@ -20,6 +20,9 @@ RUN dnf install -y https://pkg.opencast.org/rpms/release/el/9/oc-13/noarch/openc
     gzip \
     git \
     systemd \
+    gcc-c++ \
+    libstdc++-devel \
+    make \
     && dnf -y clean all
 RUN useradd --no-create-home makerpm
 

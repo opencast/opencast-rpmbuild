@@ -1,4 +1,4 @@
-name: Build FFmpeg RPMs
+name: Build whisper.cpp RPMs
 
 env:
   package: whisper.cpp
@@ -29,7 +29,7 @@ jobs:
     name: build (el${{ matrix.osversion }})
     runs-on: ubuntu-latest
     container:
-      image: docker.io/lkiesow/opencast-rpmbuild:el${{ matrix.osversion }}-oc14
+      image: docker.io/lkiesow/opencast-rpmbuild:el${{ matrix.osversion }}-oc15
     steps:
       - uses: actions/checkout@v4
 
