@@ -1,25 +1,25 @@
-name: Build Elasticsearch RPMs
+name: Build whisper.cpp RPMs
 
 env:
-  arch: x86_64
+  package: whisper.cpp-models
+  arch: noarch
   repo: release
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - develop
       - 'r/*'
     paths:
       - oc.version
-      - .github/workflows/build-elasticsearch.yml
+      - .github/workflows/build-whisper.cpp-rpms.yml
+      - rpmbuild/SPECS/whisper.cpp-models.spec
 
 jobs:
   build:
     strategy:
       matrix:
         osversion:
-          - 7
           - 8
           - 9
     outputs:
@@ -31,25 +31,42 @@ jobs:
     container:
       image: docker.io/lkiesow/opencast-rpmbuild:el${{ matrix.osversion }}-oc15
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - id: version
         run: echo "version=$(cat oc.version)" >> $GITHUB_OUTPUT
 
-      - name: download rpm
+      - name: mimic rpmdev-setuptree
+        working-directory: rpmbuild
         run: |
-          curl -OL https://pkg.opencast.org/rpms/release/el/9/oc-11/x86_64/elasticsearch/elasticsearch-oss-7.10.2-x86_64.rpm
+          ln -s "$(pwd)" ~/rpmbuild
+
+      - name: download sources
+        working-directory: rpmbuild/SPECS
+        run: |
+          spectool -g -R ${{ env.package }}.spec
+
+      - name: build rpm
+        working-directory: rpmbuild/SPECS
+        run: |
+          rpmbuild -ba ${{ env.package }}.spec
+
+      - name: list rpms
+        working-directory: rpmbuild/RPMS/${{ env.arch }}
+        run: |
+          du -hs ./*.rpm
 
       - name: prepare gpg
         env:
-          GPG_KEY: ${{ secrets.GPG_KEY_OC16 }}
+          GPG_KEY: ${{ secrets.GPG_KEY_OC15 }}
         run: |
           echo "${GPG_KEY}" | gpg --import
           echo '%_gpg_name cloud@opencast.org' >> ~/.rpmmacros
 
       - name: sign rpms
+        working-directory: rpmbuild/RPMS/${{ env.arch }}
         run: |
-          rpmsign --addsign elasticsearch-oss-*.rpm
+          rpmsign --addsign *.rpm
 
       - name: configure s3cmd
         env:
@@ -66,6 +83,7 @@ jobs:
           echo "signature_v2 = False" >> "$HOME/.s3cfg"
 
       - name: publish repository rpm
+        working-directory: rpmbuild/RPMS/${{ env.arch }}
         run: |
           s3cmd put -P *.rpm "s3://opencast-pkg/rpms/${{ env.repo }}/el/${{ matrix.osversion }}/oc-${{ steps.version.outputs.version }}/${{ env.arch }}/"
 
@@ -75,7 +93,6 @@ jobs:
     strategy:
       matrix:
         os-version:
-          - 7
           - 8
           - 9
     with:

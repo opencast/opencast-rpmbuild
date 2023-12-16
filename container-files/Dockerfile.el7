@@ -10,19 +10,22 @@ RUN yum -y install \
     yum-utils \
     rpmdevtools \
     rpmlint \
-	 rpm-sign \
-	 createrepo \
+    rpm-sign \
+    createrepo \
     sudo \
     bzip2 \
     java-11-devel \
-	 jq \
+    jq \
     sed \
     tar \
     xz \
     gzip \
     git \
-	 s3cmd \
+    s3cmd \
     systemd \
+    gcc-c++ \
+    libstdc++-devel \
+    make \
     && yum -y clean all
 RUN useradd --no-create-home makerpm
 
