@@ -1,4 +1,4 @@
-name: Build whisper.cpp RPMs
+name: Build whisper.cpp module RPMs
 
 env:
   package: whisper.cpp-models
