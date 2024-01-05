@@ -1,5 +1,5 @@
 Name:           whisper.cpp
-Version:        1.5.3
+Version:        1.5.4
 Release:        1%{?dist}
 Summary:        Whisper automatic speech recognition
 License:        MIT
@@ -42,6 +42,9 @@ install -p    -m 0744 models/download-ggml-model.sh %{buildroot}%{_sbindir}/%{na
 %{_sbindir}/%{name}-model-download
 
 %changelog
+* Fri Jan 05 2024 Lars Kiesow <lkiesow@uos.de> - 1.5.4-1
+- Update to whisper.cpp 1.5.4
+
 * Thu Jan 04 2024 Lars Kiesow <lkiesow@uos.de> - 1.5.3-1
 - Update to whisper.cpp 1.5.3
 
