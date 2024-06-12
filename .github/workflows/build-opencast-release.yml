@@ -21,7 +21,6 @@ jobs:
     strategy:
       matrix:
         osversion:
-          - 7
           - 8
           - 9
     outputs:
