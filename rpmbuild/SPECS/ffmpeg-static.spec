@@ -7,7 +7,7 @@
 
 Name:          ffmpeg
 Summary:       Hyper fast MPEG1/MPEG4/H263/RV and AC3/MPEG audio encoder
-Version:       6.1
+Version:       7.0.1
 Release:       1%{?dist}
 License:       GPLv3+
 Group:         System Environment/Libraries
@@ -55,6 +55,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Wed Jun 12 2024 Lars Kiesow <lkiesow@uos.de> - 7.0.1-1
+- Upgrade to FFmpeg 7.0.1
+
 * Fri Nov 24 2023 Lars Kiesow <lkiesow@uos.de> - 6.1-1
 - Update to static 6.1
 
