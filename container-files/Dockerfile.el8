@@ -1,4 +1,4 @@
-FROM quay.io/centos/centos:stream8
+FROM docker.io/library/rockylinux:8
 
 RUN dnf install -y https://pkg.opencast.org/rpms/release/el/8/noarch/opencast-repository-8-0-1.el8.noarch.rpm \
     && dnf -y install epel-release \
