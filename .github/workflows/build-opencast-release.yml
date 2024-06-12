@@ -21,7 +21,6 @@ jobs:
     strategy:
       matrix:
         osversion:
-          - 7
           - 8
           - 9
     outputs:
@@ -32,7 +31,7 @@ jobs:
     name: build (el${{ matrix.osversion }})
     runs-on: ubuntu-latest
     container:
-      image: docker.io/lkiesow/opencast-rpmbuild:el${{ matrix.osversion }}-oc14
+      image: docker.io/lkiesow/opencast-rpmbuild:el${{ matrix.osversion }}-oc16
     steps:
       - uses: actions/checkout@v3
 
