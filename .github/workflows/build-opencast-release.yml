@@ -70,12 +70,6 @@ jobs:
         run: >
           git checkout "$(cat latest.version)"
 
-      - name: Patch node version since el7 cannot run Node.js 18
-        if: matrix.osversion == 7
-        working-directory: opencast
-        run: |
-          sed -i 's/node.version>v18.16.0/node.version>v16.13.0/' pom.xml
-
       - name: cache local maven repository
         if: steps.version-check.outputs.new == 'yes'
         uses: actions/cache@v3
@@ -203,7 +197,6 @@ jobs:
     strategy:
       matrix:
         os-version:
-          - 7
           - 8
           - 9
     with:

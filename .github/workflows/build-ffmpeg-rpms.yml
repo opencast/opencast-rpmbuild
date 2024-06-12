@@ -94,7 +94,6 @@ jobs:
     strategy:
       matrix:
         os-version:
-          - 7
           - 8
           - 9
     with:
