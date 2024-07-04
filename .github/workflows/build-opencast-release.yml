@@ -185,7 +185,6 @@ jobs:
 
   createrepo:
     uses: opencast/opencast-rpmbuild/.github/workflows/createrepo.yml@r/14.x
-    if: ${{ needs.build.outputs.new == 'yes' }}
     needs: build
     strategy:
       matrix:
