@@ -35,9 +35,9 @@ Source5:       jetty-web.xml
 BuildRequires: tar
 BuildRequires: gzip
 
-Requires: ffmpeg >= 5
+Requires: ffmpeg >= 7
 Requires: hunspell >= 1.2.8
-Requires: java-11
+Requires: java-17
 Requires: tesseract >= 3
 
 # For the start/stop scripts:
