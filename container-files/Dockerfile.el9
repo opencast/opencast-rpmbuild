@@ -1,6 +1,6 @@
 FROM quay.io/centos/centos:stream9
 
-RUN dnf install -y https://pkg.opencast.org/rpms/release/el/9/oc-13/noarch/opencast-repository-13-1.el9.noarch.rpm \
+RUN dnf install -y https://pkg.opencast.org/rpms/release/el/9/oc-16/noarch/opencast-repository-16-1.el9.noarch.rpm \
     && dnf -y install python3-pip \
     && pip3 install s3cmd \
     && dnf -y install \
@@ -11,7 +11,7 @@ RUN dnf install -y https://pkg.opencast.org/rpms/release/el/9/oc-13/noarch/openc
     createrepo \
     sudo \
     bzip2 \
-    java-11-devel \
+    java-17-devel \
     jq \
     maven \
     sed \
@@ -27,8 +27,8 @@ RUN dnf install -y https://pkg.opencast.org/rpms/release/el/9/oc-13/noarch/openc
 RUN useradd --no-create-home makerpm
 
 # Make Java 11 the default
-RUN alternatives --set java java-11-openjdk.x86_64 \
-    && alternatives --set javac java-11-openjdk.x86_64
-ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+RUN alternatives --set java java-17-openjdk.x86_64 \
+    && alternatives --set javac java-17-openjdk.x86_64
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk
 
 CMD ["/build"]

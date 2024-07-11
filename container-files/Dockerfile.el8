@@ -1,9 +1,9 @@
 FROM docker.io/library/rockylinux:8
 
-RUN dnf install -y https://pkg.opencast.org/rpms/release/el/8/noarch/opencast-repository-8-0-1.el8.noarch.rpm \
+RUN dnf install -y https://pkg.opencast.org/rpms/release/el/8/oc-16/noarch/opencast-repository-16-1.el8.noarch.rpm \
     && dnf -y install epel-release \
     && dnf -y clean all
-RUN dnf -y install https://data.lkiesow.io/opencast/maven-3.8.2-1.el8.noarch.rpm
+RUN dnf -y install https://data.lkiesow.de/opencast/maven-3.8.2-1.el8.noarch.rpm
 RUN dnf -y install \
     dnf-plugins-core \
     rpmdevtools \
@@ -12,7 +12,7 @@ RUN dnf -y install \
     createrepo \
     sudo \
     bzip2 \
-    java-11-devel \
+    java-17-devel \
     jq \
     sed \
     tar \
@@ -28,8 +28,8 @@ RUN dnf -y install \
 RUN useradd --no-create-home makerpm
 
 # Make Java 11 the default
-RUN alternatives --set java java-11-openjdk.x86_64 \
-    && alternatives --set javac java-11-openjdk.x86_64
-ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+RUN alternatives --set java java-17-openjdk.x86_64 \
+    && alternatives --set javac java-17-openjdk.x86_64
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk
 
 CMD ["/build"]
