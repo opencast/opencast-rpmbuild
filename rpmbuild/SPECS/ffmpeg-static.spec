@@ -2,12 +2,9 @@
 %global debug_package %{nil}
 %global __os_install_post %{nil}
 
-%define  date      20221226041111
-%define  nversion  N-109457-geeb280f351
-
 Name:          ffmpeg
 Summary:       Hyper fast MPEG1/MPEG4/H263/RV and AC3/MPEG audio encoder
-Version:       7.0.1
+Version:       7.0.2
 Release:       1%{?dist}
 License:       GPLv3+
 Group:         System Environment/Libraries
@@ -55,6 +52,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Sun Sep 29 2024 Lars Kiesow <lkiesow@uos.de> - 7.0.2-1
+- Update to FFmpeg 7.0.2
+
 * Wed Jun 12 2024 Lars Kiesow <lkiesow@uos.de> - 7.0.1-1
 - Upgrade to FFmpeg 7.0.1
 
