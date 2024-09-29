@@ -41,7 +41,7 @@ jobs:
 
       - name: prepare gpg
         env:
-          GPG_KEY: ${{ secrets.GPG_KEY_OC16 }}
+          GPG_KEY: ${{ secrets.GPG_KEY_OC17 }}
         run: |
           echo "${GPG_KEY}" | gpg --import
           echo '%_gpg_name cloud@opencast.org' >> ~/.rpmmacros
