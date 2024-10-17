@@ -1,0 +1,55 @@
+name: Trigger update
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  push:
+    branches:
+      - develop
+
+jobs:
+  main:
+    strategy:
+      matrix:
+        oc-version:
+          - 15
+          - 16
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare git
+        run: |
+          git config --global user.name "Deployment Trigger"
+          git config --global user.email "lkiesow@uos.de"
+
+      - name: Prepare GitHub SSH key
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+        run: |
+          install -dm 700 ~/.ssh/
+          echo "${DEPLOY_KEY}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Clone repository
+        run: |
+          git clone git@github.com:opencast/opencast-rpmbuild.git
+
+      - name: Switch to release branch
+        working-directory: opencast-rpmbuild
+        run: |
+          git checkout r/${{ matrix.oc-version }}.x
+
+      - name: Update trigger
+        working-directory: opencast-rpmbuild
+        run: |
+          date > .trigger
+
+      - name: Commit trigger file
+        working-directory: opencast-rpmbuild
+        run: |
+          git commit .trigger -m "Trigger on $(date)"
+
+      - name: Push trigger
+        working-directory: opencast-rpmbuild
+        run: |
+          git push origin r/${{ matrix.oc-version }}.x
