@@ -1,7 +1,7 @@
-name: Build whisper.cpp module RPMs
+name: Build whisper.cpp v3 module RPMs
 
 env:
-  package: whisper.cpp-models
+  package: whisper.cpp-models-v3
   arch: noarch
   repo: release
 
@@ -12,8 +12,8 @@ on:
       - 'r/*'
     paths:
       - oc.version
-      - .github/workflows/build-whisper.cpp-model-rpms.yml
-      - rpmbuild/SPECS/whisper.cpp-models.spec
+      - .github/workflows/build-whisper.cpp-model-v3-rpms.yml
+      - rpmbuild/SPECS/whisper.cpp-models-v3.spec
 
 jobs:
   build:
