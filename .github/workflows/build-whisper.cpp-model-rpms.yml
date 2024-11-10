@@ -12,7 +12,7 @@ on:
       - 'r/*'
     paths:
       - oc.version
-      - .github/workflows/build-whisper.cpp-rpms.yml
+      - .github/workflows/build-whisper.cpp-model-rpms.yml
       - rpmbuild/SPECS/whisper.cpp-models.spec
 
 jobs:
