@@ -1,10 +1,10 @@
 Name:           whisper.cpp
-Version:        1.7.2
+Version:        1.7.5
 Release:        1%{?dist}
 Summary:        Whisper automatic speech recognition
 License:        MIT
 Source0:        https://github.com/ggerganov/%{name}/archive/refs/tags/v%{version}.tar.gz
-BuildRequires:  coreutils make gcc-c++ libstdc++-devel
+BuildRequires:  coreutils make cmake gcc-c++ libstdc++-devel git
 Requires:       libstdc++ curl
 URL:            https://github.com/ggerganov/whisper.cpp
 
@@ -18,6 +18,9 @@ High-performance inference of OpenAI's Whisper automatic speech recognition (ASR
 %setup -q
 
 %build
+# Replace sed with this for versions after 1.7.5
+#export CMAKE_ARGS="-DBUILD_SHARED_LIBS=OFF"
+sed -i 's/cmake -B build$/cmake -B build -DBUILD_SHARED_LIBS=OFF/' Makefile
 make -j
 # patch model download script
 sed -i 's#models_path=.*$#models_path=%{_datadir}/%{name}/models/#' models/download-ggml-model.sh
@@ -25,23 +28,29 @@ sed -i 's#models_path=.*$#models_path=%{_datadir}/%{name}/models/#' models/downl
 %install
 install -p -d -m 0755 %{buildroot}%{_datadir}/%{name}/models/
 install -p -d -m 0755 %{buildroot}%{_bindir}
+
+cd build/bin/
 install -p    -m 0755 main %{buildroot}%{_bindir}/%{name}
-install -p    -m 0755 quantize %{buildroot}%{_bindir}/%{name}-quantize
-install -p    -m 0755 server %{buildroot}%{_bindir}/%{name}-server
+install -p    -m 0755 whisper-* %{buildroot}%{_bindir}/
+
+cd -
 install -p -d -m 0755 %{buildroot}%{_sbindir}
-install -p    -m 0744 models/download-ggml-model.sh %{buildroot}%{_sbindir}/%{name}-model-download
+install -p    -m 0744 models/download-ggml-model.sh %{buildroot}%{_sbindir}/whisper-ggml-model-download
 
 
 %files
 %license LICENSE
 %doc README.md
 %dir %{_datadir}/%{name}/models/
-%{_bindir}/%{name}
-%{_bindir}/%{name}-quantize
-%{_bindir}/%{name}-server
-%{_sbindir}/%{name}-model-download
+%{_bindir}/*
+%{_sbindir}/*
 
 %changelog
+* Tue Jun 10 2025 Lars Kiesow <lkiesow@uos.de> - 1.7.5-1
+- Update to whisper.cpp 1.7.5
+- Renamed binaries (followed upstream)
+- Not including shared library
+
 * Tue Nov 19 2024 Lars Kiesow <lkiesow@uos.de> - 1.7.2-1
 - Update to whisper.cpp 1.7.2
 
