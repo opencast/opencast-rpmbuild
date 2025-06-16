@@ -2,7 +2,6 @@ FROM quay.io/centos/centos:stream9
 
 RUN dnf install -y https://pkg.opencast.org/rpms/release/el/9/oc-17/noarch/opencast-repository-17-1.el9.noarch.rpm \
     && dnf -y install \
-    s3cmd \
     dnf-plugins-core \
     rpmdevtools \
     rpmlint \
@@ -18,6 +17,7 @@ RUN dnf install -y https://pkg.opencast.org/rpms/release/el/9/oc-17/noarch/openc
     xz \
     gzip \
     git \
+    s3cmd \
     systemd \
     gcc-c++ \
     libstdc++-devel \
