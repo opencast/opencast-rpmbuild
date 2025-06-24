@@ -36,7 +36,7 @@ BuildRequires: tar
 BuildRequires: gzip
 
 Requires: ffmpeg >= 7
-Requires: java-21
+Requires: java-21-headless
 Requires: tesseract >= 3
 
 # For the start/stop scripts:
