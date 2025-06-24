@@ -1,0 +1,34 @@
+FROM quay.io/centos/centos:stream10
+
+RUN dnf -y install epel-release \
+    && dnf -y install \
+    dnf-plugins-core \
+    rpmdevtools \
+    rpmlint \
+    rpm-sign \
+    createrepo \
+    sudo \
+    bzip2 \
+    java-21-devel \
+    jq \
+    maven \
+    sed \
+    tar \
+    xz \
+    gzip \
+    git \
+    s3cmd \
+    systemd \
+    gcc-c++ \
+    libstdc++-devel \
+    make \
+    cmake \
+    && dnf -y clean all
+RUN useradd --no-create-home makerpm
+
+# Make Java 21 the default
+RUN alternatives --set java /usr/lib/jvm/java-21-openjdk/bin/java \
+    && alternatives --set javac /usr/lib/jvm/java-21-openjdk/bin/javac
+ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk
+
+CMD ["/build"]
