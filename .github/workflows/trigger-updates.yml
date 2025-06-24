@@ -12,9 +12,9 @@ jobs:
     strategy:
       matrix:
         oc-version:
-          - 15
           - 16
           - 17
+          - 18
     runs-on: ubuntu-latest
     steps:
       - name: Prepare git

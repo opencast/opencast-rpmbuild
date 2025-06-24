@@ -26,3 +26,8 @@ sed -i 's/GPG_KEY_OC18/GPG_KEY_OC19/g' .github/workflows/build-*.yml
 echo develop > branch.version
 echo 19 > oc.version
 ```
+
+Finally, update build trigger branches
+```
+vim .github/workflows/trigger-updates.yml
+```
