@@ -21,6 +21,7 @@ jobs:
         osversion:
           - 8
           - 9
+          - 10
     outputs:
       oc-version: ${{ steps.version.outputs.version }}
       arch: ${{ env.arch}}
@@ -28,7 +29,7 @@ jobs:
     name: build (el${{ matrix.osversion }})
     runs-on: ubuntu-latest
     container:
-      image: docker.io/lkiesow/opencast-rpmbuild:el${{ matrix.osversion }}-oc16
+      image: docker.io/lkiesow/opencast-rpmbuild:el${{ matrix.osversion }}-oc18
     steps:
       - uses: actions/checkout@v4
 
@@ -76,6 +77,7 @@ jobs:
         os-version:
           - 8
           - 9
+          - 10
     with:
       oc-version: ${{ needs.build.outputs.oc-version }}
       os-version: ${{ matrix.os-version }}
