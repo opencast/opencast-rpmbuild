@@ -36,8 +36,7 @@ BuildRequires: tar
 BuildRequires: gzip
 
 Requires: ffmpeg >= 7
-Requires: hunspell >= 1.2.8
-Requires: java-17
+Requires: java-21
 Requires: tesseract >= 3
 
 # For the start/stop scripts:
