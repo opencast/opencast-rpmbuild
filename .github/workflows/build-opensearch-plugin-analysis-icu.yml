@@ -13,7 +13,7 @@ on:
       - 'r/*'
     paths:
       - oc.version
-      - .github/workflows/build-opensearch-plugin-analysis-icu.yml+
+      - .github/workflows/build-opensearch-plugin-analysis-icu.yml
       - rpmbuild/SPECS/opensearch-analysis-icu.spec
 
 jobs:
