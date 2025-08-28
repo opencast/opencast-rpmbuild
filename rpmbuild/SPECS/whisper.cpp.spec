@@ -19,8 +19,8 @@ High-performance inference of OpenAI's Whisper automatic speech recognition (ASR
 
 %build
 # Replace sed with this for versions after 1.7.5
-#export CMAKE_ARGS="-DBUILD_SHARED_LIBS=OFF"
-sed -i 's/cmake -B build$/cmake -B build -DBUILD_SHARED_LIBS=OFF/' Makefile
+export CMAKE_ARGS="-DGGML_STATIC=ON -DWHISPER_SHARED_LIB=OFF -DBUILD_SHARED_LIBS=OFF"
+sed -i 's/cmake -B build$/cmake -B build -DGGML_STATIC=ON -DWHISPER_SHARED_LIB=OFF -DBUILD_SHARED_LIBS=OFF/' Makefile
 make -j
 # patch model download script
 sed -i 's#models_path=.*$#models_path=%{_datadir}/%{name}/models/#' models/download-ggml-model.sh
