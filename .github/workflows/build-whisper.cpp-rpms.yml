@@ -31,7 +31,7 @@ jobs:
     name: build (el${{ matrix.osversion }})
     runs-on: ubuntu-latest
     container:
-      image: docker.io/lkiesow/opencast-rpmbuild:el${{ matrix.osversion }}-oc18
+      image: docker.io/lkiesow/opencast-rpmbuild:el${{ matrix.osversion }}-oc18-1
     steps:
       - uses: actions/checkout@v4
 
@@ -49,6 +49,13 @@ jobs:
           spectool -g -R ${{ env.package }}.spec
 
       - name: build rpm
+        if: osversion == 8
+        working-directory: rpmbuild/SPECS
+        run: |
+          scl enable gcc-toolset-11 'rpmbuild -ba ${{ env.package }}.spec'
+
+      - name: build rpm
+        if: osversion != 8
         working-directory: rpmbuild/SPECS
         run: |
           rpmbuild -ba ${{ env.package }}.spec
