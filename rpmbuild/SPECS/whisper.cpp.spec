@@ -1,5 +1,5 @@
 Name:           whisper.cpp
-Version:        1.7.5
+Version:        1.7.6
 Release:        1%{?dist}
 Summary:        Whisper automatic speech recognition
 License:        MIT
@@ -46,6 +46,10 @@ install -p    -m 0744 models/download-ggml-model.sh %{buildroot}%{_sbindir}/whis
 %{_sbindir}/*
 
 %changelog
+* Thu Aug 28 2025 Lars Kiesow <lkiesow@uos.de> - 1.7.6-1
+- Update to version 1.7.6
+- This includes VAD support
+
 * Tue Jun 10 2025 Lars Kiesow <lkiesow@uos.de> - 1.7.5-1
 - Update to whisper.cpp 1.7.5
 - Renamed binaries (followed upstream)
