@@ -49,13 +49,13 @@ jobs:
           spectool -g -R ${{ env.package }}.spec
 
       - name: build rpm
-        if: osversion == 8
+        if: matrix.osversion == 8
         working-directory: rpmbuild/SPECS
         run: |
           scl enable gcc-toolset-11 'rpmbuild -ba ${{ env.package }}.spec'
 
       - name: build rpm
-        if: osversion != 8
+        if: matrix.osversion != 8
         working-directory: rpmbuild/SPECS
         run: |
           rpmbuild -ba ${{ env.package }}.spec
