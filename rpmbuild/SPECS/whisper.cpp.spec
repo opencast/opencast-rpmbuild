@@ -1,12 +1,22 @@
 Name:           whisper.cpp
 Version:        1.7.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Whisper automatic speech recognition
 License:        MIT
 Source0:        https://github.com/ggerganov/%{name}/archive/refs/tags/v%{version}.tar.gz
-BuildRequires:  coreutils make cmake gcc-c++ libstdc++-devel git
-Requires:       libstdc++ curl
 URL:            https://github.com/ggerganov/whisper.cpp
+
+BuildRequires:  coreutils
+BuildRequires:  make
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  libstdc++-devel
+BuildRequires:  git
+
+Requires:       curl
+Requires:       libstdc++
+Requires:       whisper.cpp-base
+Requires:       whisper.cpp-vad-silero
 
 %define debug_package %{nil}
 %define source_date_epoch_from_changelog 0
@@ -46,6 +56,9 @@ install -p    -m 0744 models/download-ggml-model.sh %{buildroot}%{_sbindir}/whis
 %{_sbindir}/*
 
 %changelog
+* Fri Aug 29 2025 Lars Kiesow <lkiesow@uos.de> - 1.7.6-2
+- Require installation of base models
+
 * Thu Aug 28 2025 Lars Kiesow <lkiesow@uos.de> - 1.7.6-1
 - Update to version 1.7.6
 - This includes VAD support
