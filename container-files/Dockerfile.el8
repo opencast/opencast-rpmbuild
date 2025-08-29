@@ -7,6 +7,9 @@ RUN dnf -y install https://data.lkiesow.de/opencast/maven-3.8.2-1.el8.noarch.rpm
 RUN dnf -y install \
     dnf-plugins-core \
     rpmdevtools \
+    scl-utils \
+    scl-utils-build \
+    gcc-toolset-11-toolchain \
     rpmlint \
     rpm-sign \
     createrepo \

@@ -1,8 +1,8 @@
-name: Build whisper.cpp RPMs
+name: Build whisper.cpp VAD module RPMs
 
 env:
-  package: whisper.cpp
-  arch: x86_64
+  package: whisper.cpp-vad-silero
+  arch: noarch
   repo: release
 
 on:
@@ -13,8 +13,8 @@ on:
       - 'r/*'
     paths:
       - oc.version
-      - .github/workflows/build-whisper.cpp-rpms.yml
-      - rpmbuild/SPECS/whisper.cpp.spec
+      - .github/workflows/build-whisper.cpp-vad-model-rpms.yml
+      - rpmbuild/SPECS/whisper.cpp-vad-silero.spec
 
 jobs:
   build:
@@ -31,7 +31,7 @@ jobs:
     name: build (el${{ matrix.osversion }})
     runs-on: ubuntu-latest
     container:
-      image: docker.io/lkiesow/opencast-rpmbuild:el${{ matrix.osversion }}-oc18-1
+      image: docker.io/lkiesow/opencast-rpmbuild:el${{ matrix.osversion }}-oc18
     steps:
       - uses: actions/checkout@v4
 
@@ -49,13 +49,6 @@ jobs:
           spectool -g -R ${{ env.package }}.spec
 
       - name: build rpm
-        if: matrix.osversion == 8
-        working-directory: rpmbuild/SPECS
-        run: |
-          scl enable gcc-toolset-11 'rpmbuild -ba ${{ env.package }}.spec'
-
-      - name: build rpm
-        if: matrix.osversion != 8
         working-directory: rpmbuild/SPECS
         run: |
           rpmbuild -ba ${{ env.package }}.spec
@@ -67,7 +60,7 @@ jobs:
 
       - name: prepare gpg
         env:
-          GPG_KEY: ${{ secrets.GPG_KEY_OC19 }}
+          GPG_KEY: ${{ secrets.GPG_KEY_OC18 }}
         run: |
           echo "${GPG_KEY}" | gpg --import
           echo '%_gpg_name cloud@opencast.org' >> ~/.rpmmacros

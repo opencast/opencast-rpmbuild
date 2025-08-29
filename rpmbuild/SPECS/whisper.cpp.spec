@@ -1,12 +1,22 @@
 Name:           whisper.cpp
-Version:        1.7.5
-Release:        1%{?dist}
+Version:        1.7.6
+Release:        2%{?dist}
 Summary:        Whisper automatic speech recognition
 License:        MIT
 Source0:        https://github.com/ggerganov/%{name}/archive/refs/tags/v%{version}.tar.gz
-BuildRequires:  coreutils make cmake gcc-c++ libstdc++-devel git
-Requires:       libstdc++ curl
 URL:            https://github.com/ggerganov/whisper.cpp
+
+BuildRequires:  coreutils
+BuildRequires:  make
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  libstdc++-devel
+BuildRequires:  git
+
+Requires:       curl
+Requires:       libstdc++
+Requires:       whisper.cpp-base
+Requires:       whisper.cpp-vad-silero
 
 %define debug_package %{nil}
 %define source_date_epoch_from_changelog 0
@@ -19,8 +29,8 @@ High-performance inference of OpenAI's Whisper automatic speech recognition (ASR
 
 %build
 # Replace sed with this for versions after 1.7.5
-#export CMAKE_ARGS="-DBUILD_SHARED_LIBS=OFF"
-sed -i 's/cmake -B build$/cmake -B build -DBUILD_SHARED_LIBS=OFF/' Makefile
+export CMAKE_ARGS="-DGGML_STATIC=ON -DWHISPER_SHARED_LIB=OFF -DBUILD_SHARED_LIBS=OFF"
+sed -i 's/cmake -B build$/cmake -B build -DGGML_STATIC=ON -DWHISPER_SHARED_LIB=OFF -DBUILD_SHARED_LIBS=OFF/' Makefile
 make -j
 # patch model download script
 sed -i 's#models_path=.*$#models_path=%{_datadir}/%{name}/models/#' models/download-ggml-model.sh
@@ -46,6 +56,13 @@ install -p    -m 0744 models/download-ggml-model.sh %{buildroot}%{_sbindir}/whis
 %{_sbindir}/*
 
 %changelog
+* Fri Aug 29 2025 Lars Kiesow <lkiesow@uos.de> - 1.7.6-2
+- Require installation of base models
+
+* Thu Aug 28 2025 Lars Kiesow <lkiesow@uos.de> - 1.7.6-1
+- Update to version 1.7.6
+- This includes VAD support
+
 * Tue Jun 10 2025 Lars Kiesow <lkiesow@uos.de> - 1.7.5-1
 - Update to whisper.cpp 1.7.5
 - Renamed binaries (followed upstream)
