@@ -47,7 +47,6 @@ cd -
 install -p -d -m 0755 %{buildroot}%{_sbindir}
 install -p    -m 0744 models/download-ggml-model.sh %{buildroot}%{_sbindir}/whisper-ggml-model-download
 
-
 %files
 %license LICENSE
 %doc README.md
