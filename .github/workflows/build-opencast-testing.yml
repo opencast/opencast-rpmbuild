@@ -86,7 +86,7 @@ jobs:
         if: steps.version-check.outputs.new == 'yes'
         working-directory: opencast
         run: >
-          mvn
+          ./mvnw
           --batch-mode
           -Dmaven.wagon.httpconnectionManager.ttlSeconds=120
           -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
