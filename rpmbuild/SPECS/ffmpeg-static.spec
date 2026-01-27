@@ -2,17 +2,20 @@
 %global debug_package %{nil}
 %global __os_install_post %{nil}
 
-Name:          ffmpeg
-Summary:       Hyper fast MPEG1/MPEG4/H263/RV and AC3/MPEG audio encoder
-Version:       7.0.2
-Release:       1%{?dist}
-License:       GPLv3+
-Group:         System Environment/Libraries
+%global build_str   n8.0.1-48-g0592be14ff
+%global build_ver   8.0
 
-Source:        https://radosgw.public.os.wwu.de/opencast-ffmpeg-static/%{name}-%{version}-amd64-static.tar.xz
-URL:           https://ffmpeg.org
-BuildRoot:     %{_tmppath}/%{name}-root
+Name:           ffmpeg
+Summary:        Hyper fast MPEG1/MPEG4/H263/RV and AC3/MPEG audio encoder
+Version:        8.0.1
+Release:        1%{?dist}
+License:        GPLv3+
+Group:          System Environment/Libraries
 
+Source0:        https://radosgw.public.os.wwu.de/opencast-ffmpeg-static/%{name}-%{build_str}-linux64-gpl-%{build_ver}.tar.xz
+
+URL:            https://ffmpeg.org
+BuildRoot:      %{_tmppath}/%{name}-%{version}-root
 
 %description
 FFmpeg is a very fast video and audio converter. It can also grab from a
@@ -25,35 +28,49 @@ quality polyphase filter.
 
 
 %prep
-%setup -q -n %{name}-%{version}-amd64-static
-
+%setup -q -n %{name}-%{build_str}-linux64-gpl-%{build_ver}
 
 %build
-
+# Static build binaries; no compilation needed.
 
 %install
 rm -rf %{buildroot}
 
+# Create necessary directories
 install -p -d -m 0755 %{buildroot}%{_bindir}
-install -p -d -m 0755 %{buildroot}%{_mandir}
-install -p ffmpeg %{buildroot}%{_bindir}
-install -p ffprobe %{buildroot}%{_bindir}
-install -p qt-faststart %{buildroot}%{_bindir}
+install -p -d -m 0755 %{buildroot}%{_mandir}/man1
+install -p -d -m 0755 %{buildroot}%{_mandir}/man3
 
+# Install Binaries
+install -p -m 0755 bin/ffmpeg %{buildroot}%{_bindir}
+install -p -m 0755 bin/ffplay %{buildroot}%{_bindir}
+install -p -m 0755 bin/ffprobe %{buildroot}%{_bindir}
+
+# Install Man Pages
+install -p -m 0644 man/man1/*.1 %{buildroot}%{_mandir}/man1/
+install -p -m 0644 man/man3/*.3 %{buildroot}%{_mandir}/man3/
+
+# Install presets
+install -p -d -m 0755 %{buildroot}%{_datadir}/%{name}
+install -p -m 0644 presets/*.ffpreset %{buildroot}%{_datadir}/%{name}/
 
 %clean
 rm -rf %{buildroot}
 
-
 %files
 %defattr(-,root,root,-)
-%doc GPLv3.txt
+%doc LICENSE.txt doc/*.html
 %{_bindir}/*
-
+%{_mandir}/man1/*
+%{_mandir}/man3/*
+%{_datadir}/%{name}
 
 %changelog
-* Sun Sep 29 2024 Lars Kiesow <lkiesow@uos.de> - 7.0.2-1
-- Update to FFmpeg 7.0.2
+* Tue Jan 27 2026 Martin Wygas <wygas@elan-ev.de> - 8.0.1-1
+- Update to FFmpeg n8.0.1-48-g0592be14ff (Static Build 8.0)
+- Added ffplay binary and man pages
+- Added presets
+- Removed deprecated qt-faststart
 
 * Wed Jun 12 2024 Lars Kiesow <lkiesow@uos.de> - 7.0.1-1
 - Upgrade to FFmpeg 7.0.1
