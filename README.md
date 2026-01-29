@@ -27,7 +27,10 @@ echo develop > branch.version
 echo 19 > oc.version
 ```
 
-Finally, update build trigger branches
+Next, update build trigger branches
 ```
 vim .github/workflows/trigger-updates.yml
 ```
+
+Finally, make sure that all workflows run properly and none fails:
+- [GitHub Actions](https://github.com/opencast/opencast-rpmbuild/actions)
