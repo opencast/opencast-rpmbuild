@@ -42,7 +42,7 @@ jobs:
 
       - name: prepare gpg
         env:
-          GPG_KEY: ${{ secrets.GPG_KEY_OC19 }}
+          GPG_KEY: ${{ secrets.GPG_KEY_OC20 }}
         run: |
           echo "${GPG_KEY}" | gpg --import
           echo '%_gpg_name cloud@opencast.org' >> ~/.rpmmacros
