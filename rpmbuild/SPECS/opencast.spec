@@ -42,6 +42,7 @@ Requires: tesseract >= 3
 # For the start/stop scripts:
 Requires: bash
 Requires: nc
+Requires: procps
 Requires: sed
 
 BuildRequires:     systemd
@@ -103,6 +104,9 @@ mv %{buildroot}%{_datadir}/opencast/data \
 
 # Create instances dir. This is still hardcoded in Karaf
 mkdir %{buildroot}%{_sharedstatedir}/opencast/instances
+# Create direcotry for Karaf to writeb it's shell history
+# If this doesn't exist, you'll get an error when launching the shell
+mkdir %{buildroot}%{_sharedstatedir}/opencast/karaf
 
 # Create some links to circumvent Karaf bugs
 ln -s %{_sysconfdir}/opencast \
@@ -113,6 +117,8 @@ ln -s %{_sharedstatedir}/opencast \
    %{buildroot}%{_datadir}/opencast/data
 ln -s %{_sharedstatedir}/opencast/instances \
    %{buildroot}%{_datadir}/opencast/instances
+ln -s %{_sharedstatedir}/opencast/karaf \
+   %{buildroot}%{_datadir}/opencast/.karaf
 
 # Add custom jetty.xml
 # Otherwise Karaf will attempt to do that and fail to start
@@ -203,6 +209,11 @@ fi
 
 
 %changelog
+* Thu Jan 29 2026 Lars Kiesow <lkiesow@uos.de> - 19-0
+- Opencast 19 patches
+- The start script needs the `ps` command
+- The Karaf shell needs write access to ~/.karaf
+
 * Tue May 16 2023 Lars Kiesow <lkiesow@uos.de> - 14-0
 - Opencast 14 daily builds
 
