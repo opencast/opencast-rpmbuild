@@ -127,7 +127,7 @@ jobs:
         run: |
           echo "%octarversion $(cat latest.version)" >> ~/.rpmmacros
           echo "%ocversion $(cat latest.version)" >> ~/.rpmmacros
-          echo "%ocrelease 2" >> ~/.rpmmacros
+          echo "%ocrelease 1" >> ~/.rpmmacros
 
       - name: build rpm
         if: steps.version-check.outputs.new == 'yes'
