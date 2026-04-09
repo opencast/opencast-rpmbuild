@@ -47,6 +47,15 @@ jobs:
         run: |
           git clone --branch "$(cat branch.version)" --depth 1 https://github.com/opencast/opencast.git
 
+      - name: Make git prefer HTTP for GitHub
+        run: |
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
+
+      - name: initialize submodules
+        working-directory: opencast
+        run: |
+          git submodule update --init --recursive
+
       - name: check if new version exists
         id: version-check
         working-directory: opencast
