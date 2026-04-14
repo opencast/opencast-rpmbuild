@@ -48,11 +48,6 @@ jobs:
         run: |
           git config --global url."https://github.com/".insteadOf "git@github.com:"
 
-      - name: initialize submodules
-        working-directory: opencast
-        run: |
-          git submodule update --init --recursive
-
       - name: check if new version exists
         id: version-check
         working-directory: opencast
@@ -79,6 +74,12 @@ jobs:
         working-directory: opencast
         run: >
           git checkout "$(cat latest.version)"
+
+      - name: initialize submodules
+        if: steps.version-check.outputs.new == 'yes'
+        working-directory: opencast
+        run: |
+          git submodule update --init --recursive
 
       - name: cache local maven repository
         if: steps.version-check.outputs.new == 'yes'
