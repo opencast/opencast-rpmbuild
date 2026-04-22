@@ -47,6 +47,11 @@ jobs:
         run: |
           git clone --branch "$(cat branch.version)" --depth 1 https://github.com/opencast/opencast.git
 
+      - name: Fail fast on version mismatch
+        working-directory: opencast
+        run: |
+          grep '<version>${{ steps.version.outputs.version }}-SNAPSHOT</version>' pom.xml
+
       - name: Make git prefer HTTP for GitHub
         run: |
           git config --global url."https://github.com/".insteadOf "git@github.com:"
