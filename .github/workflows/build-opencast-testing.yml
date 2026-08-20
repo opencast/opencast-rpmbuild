@@ -92,6 +92,20 @@ jobs:
         run: |
           sed -i "s#https://mvn.opencast.org/#file://$(readlink -f ../mvn.opencast.org)#" pom.xml
 
+      # @rollup/rollup-linux-x64-gnu 4.62.3 requires GLIBC_2.34 but EL8 has
+      # 2.28. Fixed upstream in 4.62.4.
+      - name: pin working rollup version for EL8
+        if: steps.version-check.outputs.new == 'yes' && matrix.osversion == 8
+        working-directory: opencast
+        run: |
+          ./mvnw --batch-mode -pl modules/engage-paella-player-8 \
+            frontend:install-node-and-npm -DnodeVersion=v20.12.2
+          cd modules/engage-paella-player-8
+          export PATH="$PWD/node:$PATH"
+          npm pkg set 'overrides.rollup=4.62.5'
+          npm install --package-lock-only --ignore-scripts
+          grep -q '"version": "4.62.3"' package-lock.json && exit 1 || true
+
       - name: build opencast
         if: steps.version-check.outputs.new == 'yes'
         working-directory: opencast
