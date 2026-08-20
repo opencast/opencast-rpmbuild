@@ -97,6 +97,17 @@ jobs:
         run: |
           sed -i "s#https://mvn.opencast.org/#file://$(readlink -f ../mvn.opencast.org)#" pom.xml
 
+      - name: pil rollup for el8 compatibility
+        if: steps.version-check.outputs.new == 'yes' && matrix.osversion == 8
+        working-directory: opencast
+        run: |
+          ./mvnw --batch-mode -pl modules/engage-paella-player-8 \
+            frontend:install-node-and-npm
+          cd modules/engage-paella-player-8
+          export PATH="$PWD/node:$PATH"
+          npm pkg set "overrides.rollup=..."
+          npm install --package-lock-only --ignore-scripts
+
       - name: build opencast
         if: steps.version-check.outputs.new == 'yes'
         working-directory: opencast
