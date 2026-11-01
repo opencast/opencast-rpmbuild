@@ -6,7 +6,7 @@
 
 Name:          opensearch-plugin-%{plugin_name}
 Summary:       OpenSearch ICU analysis plugin
-Version:       1.3.20
+Version:       3.9.0
 Release:       1%{?dist}
 License:       Apache-2.0
 
@@ -51,6 +51,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Sun Nov 01 2026 Lars Kiesow <lkiesow@uos.de> - 3.9.0-1
+- Update to 3.9.0 (required by Opencast 21)
+
 * Tue Jun 24 2025 Lars Kiesow <lkiesow@uos.de> - 1.3.20-1
 - Update to 1.3.20
 
