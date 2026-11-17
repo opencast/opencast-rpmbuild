@@ -28,8 +28,6 @@ URL:           https://opencast.org
 Source0:       opencast-dist-%{ocdist}-%{octarversion}.tar.gz
 Source1:       jetty.xml
 Source2:       opencast.logrotate
-Source3:       org.apache.aries.transaction.cfg
-Source4:       org.apache.karaf.shell.cfg
 Source5:       jetty-web.xml
 
 BuildRequires: tar
@@ -128,12 +126,6 @@ cp %{SOURCE5} %{buildroot}%{_sysconfdir}/opencast/jetty-web.xml
 # Install logrotate configuration
 install -p -D -m 0644 %{SOURCE2} \
    %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
-
-# Install workaround dummy file in /etc
-install -p -D -m 0644 %{SOURCE3} \
-   %{buildroot}%{_sysconfdir}/opencast
-install -p -D -m 0644 %{SOURCE4} \
-   %{buildroot}%{_sysconfdir}/opencast
 
 # Install Systemd unit file
 install -p -D -m 0644 \
