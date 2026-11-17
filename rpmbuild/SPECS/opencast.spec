@@ -103,7 +103,7 @@ mv %{buildroot}%{_datadir}/opencast/data \
 
 # Create instances dir. This is still hardcoded in Karaf
 mkdir %{buildroot}%{_sharedstatedir}/opencast/instances
-# Create direcotry for Karaf to writeb it's shell history
+# Create directory for Karaf to write its shell history
 # If this doesn't exist, you'll get an error when launching the shell
 mkdir %{buildroot}%{_sharedstatedir}/opencast/karaf
 
