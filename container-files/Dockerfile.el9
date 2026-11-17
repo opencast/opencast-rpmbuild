@@ -1,6 +1,6 @@
 FROM quay.io/centos/centos:stream9
 
-RUN dnf install -y https://pkg.opencast.org/rpms/release/el/9/oc-17/noarch/opencast-repository-17-1.el9.noarch.rpm \
+RUN dnf install -y https://pkg.opencast.org/rpms/release/el/9/oc-21/noarch/opencast-repository-21-1.el9.noarch.rpm \
     && dnf -y install \
     dnf-plugins-core \
     rpmdevtools \

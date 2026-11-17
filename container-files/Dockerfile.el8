@@ -1,6 +1,6 @@
 FROM docker.io/library/rockylinux:8
 
-RUN dnf install -y https://pkg.opencast.org/rpms/release/el/8/oc-17/noarch/opencast-repository-17-1.el8.noarch.rpm \
+RUN dnf install -y https://pkg.opencast.org/rpms/release/el/8/oc-21/noarch/opencast-repository-21-1.el8.noarch.rpm \
     && dnf -y install epel-release \
     && dnf -y clean all
 RUN dnf -y install https://data.lkiesow.de/opencast/maven-3.8.2-1.el8.noarch.rpm
