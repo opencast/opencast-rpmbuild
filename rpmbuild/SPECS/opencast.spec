@@ -22,8 +22,7 @@ Version:       %{ocversion}
 Release:       %{ocrelease}%{?dist}
 Summary:       Open Source Lecture Capture & Video Management Tool
 
-Group:         Applications/Multimedia
-License:       ECL 2.0
+License:       ECL-2.0
 URL:           https://opencast.org
 Source0:       opencast-dist-%{ocdist}-%{octarversion}.tar.gz
 Source1:       jetty.xml
