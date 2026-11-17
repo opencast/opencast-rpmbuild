@@ -192,7 +192,7 @@ fi
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 %{_unitdir}/opencast.service
 %{_datadir}/opencast
-%attr(755,%{uid},%{gid}) %{_datadir}/opencast/bin/*
+%attr(755,root,root) %{_datadir}/opencast/bin/*
 %attr(755,%{uid},%{gid}) %dir /srv/opencast
 %attr(755,%{uid},%{gid}) %dir %{_localstatedir}/log/opencast
 %attr(755,%{uid},%{gid}) %{_sharedstatedir}/opencast
