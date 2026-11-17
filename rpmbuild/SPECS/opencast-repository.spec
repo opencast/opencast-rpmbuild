@@ -2,12 +2,11 @@ Name:      opencast-repository
 Summary:   Opencast RPM Repository
 Version:   %{ocversion}
 Release:   1%{?dist}
-License:   CC-0
+License:   CC0-1.0
 URL:       https://pkg.opencast.org
 Source0:   https://raw.githubusercontent.com/opencast/opencast-rpmbuild/r/%{version}.x/rpmbuild/SOURCES/opencast.repo
 Source1:   https://raw.githubusercontent.com/opencast/opencast-rpmbuild/r/%{version}.x/rpmbuild/SOURCES/opencast-testing.repo
 BuildArch: noarch
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 Requires: epel-release
 
