@@ -22,15 +22,12 @@ Version:       %{ocversion}
 Release:       %{ocrelease}%{?dist}
 Summary:       Open Source Lecture Capture & Video Management Tool
 
-Group:         Applications/Multimedia
-License:       ECL 2.0
+License:       ECL-2.0
 URL:           https://opencast.org
 Source0:       opencast-dist-%{ocdist}-%{octarversion}.tar.gz
 Source1:       jetty.xml
 Source2:       opencast.logrotate
-Source3:       org.apache.aries.transaction.cfg
-Source4:       org.apache.karaf.shell.cfg
-Source5:       jetty-web.xml
+Source3:       jetty-web.xml
 
 BuildRequires: tar
 BuildRequires: gzip
@@ -45,17 +42,16 @@ Requires: nc
 Requires: procps
 Requires: sed
 
+%if 0%{?rhel} >= 9 || 0%{?fedora}
+BuildRequires:     systemd-rpm-macros
+%else
 BuildRequires:     systemd
+%endif
 Requires(post):    systemd
 Requires(preun):   systemd
 Requires(postun):  systemd
 
 Provides:  opencast             = %{version}
-# Keep the following at 9.
-# That is when we moved away from packages including their version.
-Provides:  opencast9-%{ocdist}  = %{version}
-Obsoletes: opencast9-%{ocdist} <= %{version}
-Obsoletes: opencast8-%{ocdist} <= %{version}
 
 BuildArch: noarch
 
@@ -70,21 +66,24 @@ educational videos.
 
 
 %prep
-%setup -q -c -a 0
+%setup -q -c
 
 
 %build
-# Fix newline character at end of configuration files
-find opencast-dist-%{ocdist}/etc -name '*.xml' \
-   -o -name '*.cfg' -exec sed -i -e '$a\' '{}' \;
+# Make sure all configuration files end with a newline.
+# The files in etc come from Opencast as well as from the Karaf assembly
+# and are not consistent about the final newline, which can also flip
+# between releases. Normalising them keeps the packaged files consistent
+# and stable, so upgrades don't create .rpmnew files differing only in a
+# trailing newline.
+find opencast-dist-%{ocdist}/etc \( -name '*.xml' -o -name '*.cfg' \) \
+   -exec sed -i -e '$a\' '{}' \;
 # ' fix vim hl
 sed -i -e '$a\' opencast-dist-%{ocdist}/etc/shell.init.script
 # ' fix vim hl
 
 
 %install
-rm -rf %{buildroot}
-
 # Create directories
 mkdir -m 755 -p %{buildroot}%{_datadir}
 mkdir -m 755 -p %{buildroot}%{_sharedstatedir}
@@ -104,7 +103,7 @@ mv %{buildroot}%{_datadir}/opencast/data \
 
 # Create instances dir. This is still hardcoded in Karaf
 mkdir %{buildroot}%{_sharedstatedir}/opencast/instances
-# Create direcotry for Karaf to writeb it's shell history
+# Create directory for Karaf to write its shell history
 # If this doesn't exist, you'll get an error when launching the shell
 mkdir %{buildroot}%{_sharedstatedir}/opencast/karaf
 
@@ -123,17 +122,11 @@ ln -s %{_sharedstatedir}/opencast/karaf \
 # Add custom jetty.xml
 # Otherwise Karaf will attempt to do that and fail to start
 cp %{SOURCE1} %{buildroot}%{_sysconfdir}/opencast/jetty.xml
-cp %{SOURCE5} %{buildroot}%{_sysconfdir}/opencast/jetty-web.xml
+cp %{SOURCE3} %{buildroot}%{_sysconfdir}/opencast/jetty-web.xml
 
 # Install logrotate configuration
 install -p -D -m 0644 %{SOURCE2} \
    %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
-
-# Install workaround dummy file in /etc
-install -p -D -m 0644 %{SOURCE3} \
-   %{buildroot}%{_sysconfdir}/opencast
-install -p -D -m 0644 %{SOURCE4} \
-   %{buildroot}%{_sysconfdir}/opencast
 
 # Install Systemd unit file
 install -p -D -m 0644 \
@@ -158,11 +151,6 @@ sed -i 's#fileName *= *${karaf.data}/log#fileName = %{_localstatedir}/log/openca
 # Patch storage dir
 sed -i 's#^\(org.opencastproject.storage.dir\)=.*$#\1=/srv/opencast#' \
    %{buildroot}%{_sysconfdir}/opencast/custom.properties
-
-
-
-%clean
-rm -rf ${buildroot}
 
 
 
@@ -202,7 +190,7 @@ fi
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 %{_unitdir}/opencast.service
 %{_datadir}/opencast
-%attr(755,%{uid},%{gid}) %{_datadir}/opencast/bin/*
+%attr(755,root,root) %{_datadir}/opencast/bin/*
 %attr(755,%{uid},%{gid}) %dir /srv/opencast
 %attr(755,%{uid},%{gid}) %dir %{_localstatedir}/log/opencast
 %attr(755,%{uid},%{gid}) %{_sharedstatedir}/opencast
