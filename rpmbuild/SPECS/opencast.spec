@@ -72,9 +72,14 @@ educational videos.
 
 
 %build
-# Fix newline character at end of configuration files
-find opencast-dist-%{ocdist}/etc -name '*.xml' \
-   -o -name '*.cfg' -exec sed -i -e '$a\' '{}' \;
+# Make sure all configuration files end with a newline.
+# The files in etc come from Opencast as well as from the Karaf assembly
+# and are not consistent about the final newline, which can also flip
+# between releases. Normalising them keeps the packaged files consistent
+# and stable, so upgrades don't create .rpmnew files differing only in a
+# trailing newline.
+find opencast-dist-%{ocdist}/etc \( -name '*.xml' -o -name '*.cfg' \) \
+   -exec sed -i -e '$a\' '{}' \;
 # ' fix vim hl
 sed -i -e '$a\' opencast-dist-%{ocdist}/etc/shell.init.script
 # ' fix vim hl
