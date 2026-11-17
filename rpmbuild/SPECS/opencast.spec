@@ -42,7 +42,11 @@ Requires: nc
 Requires: procps
 Requires: sed
 
+%if 0%{?rhel} >= 9 || 0%{?fedora}
+BuildRequires:     systemd-rpm-macros
+%else
 BuildRequires:     systemd
+%endif
 Requires(post):    systemd
 Requires(preun):   systemd
 Requires(postun):  systemd
