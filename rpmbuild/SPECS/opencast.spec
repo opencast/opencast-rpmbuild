@@ -86,8 +86,6 @@ sed -i -e '$a\' opencast-dist-%{ocdist}/etc/shell.init.script
 
 
 %install
-rm -rf %{buildroot}
-
 # Create directories
 mkdir -m 755 -p %{buildroot}%{_datadir}
 mkdir -m 755 -p %{buildroot}%{_sharedstatedir}
@@ -155,11 +153,6 @@ sed -i 's#fileName *= *${karaf.data}/log#fileName = %{_localstatedir}/log/openca
 # Patch storage dir
 sed -i 's#^\(org.opencastproject.storage.dir\)=.*$#\1=/srv/opencast#' \
    %{buildroot}%{_sysconfdir}/opencast/custom.properties
-
-
-
-%clean
-rm -rf ${buildroot}
 
 
 
