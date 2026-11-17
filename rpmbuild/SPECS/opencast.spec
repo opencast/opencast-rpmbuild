@@ -52,11 +52,6 @@ Requires(preun):   systemd
 Requires(postun):  systemd
 
 Provides:  opencast             = %{version}
-# Keep the following at 9.
-# That is when we moved away from packages including their version.
-Provides:  opencast9-%{ocdist}  = %{version}
-Obsoletes: opencast9-%{ocdist} <= %{version}
-Obsoletes: opencast8-%{ocdist} <= %{version}
 
 BuildArch: noarch
 
