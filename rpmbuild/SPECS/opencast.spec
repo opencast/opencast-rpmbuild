@@ -71,7 +71,7 @@ educational videos.
 
 
 %prep
-%setup -q -c -a 0
+%setup -q -c
 
 
 %build
