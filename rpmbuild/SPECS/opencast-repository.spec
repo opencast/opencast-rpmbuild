@@ -11,13 +11,6 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 Requires: epel-release
 
-Provides:  opencast-repository-13  = %{version}
-Obsoletes: opencast-repository-13 <= %{version}
-Obsoletes: opencast-repository-12 <= %{version}
-Obsoletes: opencast-repository-11 <= %{version}
-Obsoletes: opencast-repository-10 <= %{version}
-Obsoletes: opencast-repository-9 <= %{version}
-
 
 %description
 RPM repository for Opencast on CentOS Stream, Red hat Enterprise Linux and
