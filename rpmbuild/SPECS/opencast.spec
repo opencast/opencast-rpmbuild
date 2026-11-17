@@ -27,7 +27,7 @@ URL:           https://opencast.org
 Source0:       opencast-dist-%{ocdist}-%{octarversion}.tar.gz
 Source1:       jetty.xml
 Source2:       opencast.logrotate
-Source5:       jetty-web.xml
+Source3:       jetty-web.xml
 
 BuildRequires: tar
 BuildRequires: gzip
@@ -122,7 +122,7 @@ ln -s %{_sharedstatedir}/opencast/karaf \
 # Add custom jetty.xml
 # Otherwise Karaf will attempt to do that and fail to start
 cp %{SOURCE1} %{buildroot}%{_sysconfdir}/opencast/jetty.xml
-cp %{SOURCE5} %{buildroot}%{_sysconfdir}/opencast/jetty-web.xml
+cp %{SOURCE3} %{buildroot}%{_sysconfdir}/opencast/jetty-web.xml
 
 # Install logrotate configuration
 install -p -D -m 0644 %{SOURCE2} \
