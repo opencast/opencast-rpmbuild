@@ -30,12 +30,7 @@ install -m 0644 -p -D opencast.repo %{buildroot}%{_sysconfdir}/yum.repos.d/openc
 install -m 0644 -p -D opencast-testing.repo %{buildroot}%{_sysconfdir}/yum.repos.d/opencast-testing.repo
 
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-
 %files
-%defattr(-,root,root,-)
 %config %{_sysconfdir}/yum.repos.d/*
 
 
