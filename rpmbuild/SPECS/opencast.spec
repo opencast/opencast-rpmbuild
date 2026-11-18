@@ -186,7 +186,11 @@ fi
 
 
 %files
+# Restrict access to the configuration since it contains credentials.
+# Opencast gets read-only access via its group.
+%defattr(0640,root,%{gid},0750)
 %config(noreplace) %{_sysconfdir}/opencast/
+%defattr(-,root,root,-)
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 %{_unitdir}/opencast.service
 %{_datadir}/opencast

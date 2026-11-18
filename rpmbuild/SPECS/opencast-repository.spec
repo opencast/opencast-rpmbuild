@@ -2,21 +2,13 @@ Name:      opencast-repository
 Summary:   Opencast RPM Repository
 Version:   %{ocversion}
 Release:   1%{?dist}
-License:   CC-0
+License:   CC0-1.0
 URL:       https://pkg.opencast.org
 Source0:   https://raw.githubusercontent.com/opencast/opencast-rpmbuild/r/%{version}.x/rpmbuild/SOURCES/opencast.repo
 Source1:   https://raw.githubusercontent.com/opencast/opencast-rpmbuild/r/%{version}.x/rpmbuild/SOURCES/opencast-testing.repo
 BuildArch: noarch
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 Requires: epel-release
-
-Provides:  opencast-repository-13  = %{version}
-Obsoletes: opencast-repository-13 <= %{version}
-Obsoletes: opencast-repository-12 <= %{version}
-Obsoletes: opencast-repository-11 <= %{version}
-Obsoletes: opencast-repository-10 <= %{version}
-Obsoletes: opencast-repository-9 <= %{version}
 
 
 %description
@@ -38,12 +30,7 @@ install -m 0644 -p -D opencast.repo %{buildroot}%{_sysconfdir}/yum.repos.d/openc
 install -m 0644 -p -D opencast-testing.repo %{buildroot}%{_sysconfdir}/yum.repos.d/opencast-testing.repo
 
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-
 %files
-%defattr(-,root,root,-)
 %config %{_sysconfdir}/yum.repos.d/*
 
 
